@@ -41,7 +41,7 @@
 
 <mark>`<preencher abaixo>`</mark>
 
-![Visualização resultante](imagem-da-visualizacao.png)
+![Visualização resultante](outputs/images/graficos/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png)
 
 ## Descrição da visualização
 

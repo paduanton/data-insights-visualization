@@ -16,10 +16,10 @@ Este repositório organiza os microdados brutos em `data/raw/`, mantendo os arqu
 
 Arquivos de origem preservados:
 
-- `data/raw/archives/arquivo.zip`
-- `data/raw/archives/arquivo1.zip`
-- `data/raw/archives/SIM.zip`
-- `data/raw/archives/SIM2.zip`
+- `data/raw/archives/sinasc_rs_2024_dn.zip`: contém `DNRS2024.dbc`.
+- `data/raw/archives/cnes_rs_2024_st_mensal.zip`: contém `STRS2401.dbc` a `STRS2412.dbc`.
+- `data/raw/archives/sim_rs_2024_obitos_gerais.zip`: contém `DORS2024.dbc`.
+- `data/raw/archives/sim_rs_2024_obitos_fetais_maternos.zip`: contém `DOFET24.dbc`, `DOMAT24.dbc` e uma cópia de `DORS2024.dbc`.
 
 ## Referência do anteprojeto
 
