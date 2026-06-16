@@ -17,10 +17,10 @@
 > - Se houver mais de um conjunto de dados, liste todos separadamente.
 > - Para cada conjunto de dados, inclua também uma **descrição curta** explicando os dados.
 
-1. **Dataset 1**: <mark>`<link>`</mark>
-    * **Descrição curta**: <mark>`<preencher>`</mark>
-2. **Dataset 2**: <mark>`<link>`</mark>
-    * **Descrição curta**: <mark>`<preencher>`</mark>
+1. **Dataset 1**: <mark>`https://datasus.saude.gov.br/transferencia-de-arquivos/#`</mark>
+    * **Descrição curta**: <mark>`SINAN/SIFCBR 2024 - Sífilis congênita: microdados de notificações de sífilis congênita em 2024, com informações sobre município de residência, raça/cor materna, realização de pré-natal, escolaridade materna e outros dados clínicos/epidemiológicos.`</mark>
+2. **Dataset 2**: <mark>`https://datasus.saude.gov.br/transferencia-de-arquivos/#`</mark>
+    * **Descrição curta**: <mark>`SINASC 2024 - Nascidos vivos: microdados de nascidos vivos no Rio Grande do Sul em 2024, usados como base complementar para o contexto do estudo, contendo informações sobre município de residência, raça/cor da mãe, escolaridade e consultas de pré-natal.`</mark>
 3. ...
 
 ## Código-fonte da visualização
@@ -29,8 +29,8 @@
 >
 > - Indique abaixo onde está, dentro deste repositório, o código-fonte usado para gerar a visualização.
 
-- **Arquivo principal**: <mark>`<preencher>`</mark>
-- **Arquivos complementares (se houver)**: <mark>`<preencher>`</mark>
+- **Arquivo principal**: `notebooks/visualizacao_sifilis_congenita_poars.ipynb`
+- **Arquivos complementares (se houver)**: `data/raw/SIFCBR24.dbc`; `data/raw/sinasc/DNRS2024.dbc`
 
 ## Imagem da visualização gerada
 
