@@ -16,7 +16,7 @@
 ## Código-fonte da visualização
 
 - **Arquivo principal**: `notebooks/visualizacao_sifilis_congenita_poars.ipynb`
-- **Arquivos complementares (se houver)**: `data/raw/SIFCBR24.dbc`; `data/raw/sinasc/DNRS2024.dbc`
+- **Arquivos complementares**: `data/raw/SIFCBR24.dbc`; `data/raw/sinasc/DNRS2024.dbc`
 
 ## Imagem da visualização gerada
 
