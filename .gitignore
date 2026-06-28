@@ -1,5 +1,36 @@
-.codex_tmp/
+# Environment
 .env
+.env.*
+!.env.example
 .venv/
+venv/
+env/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Local tooling
+.codex_tmp/
+.cache/
+
+# Docker and database local state
+postgres_data/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
