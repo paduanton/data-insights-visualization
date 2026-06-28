@@ -39,3 +39,30 @@ def prepare_dataframe(df: pd.DataFrame, source_path: Path, source_system: str, y
     df["source_file"] = source_path.name
     df["loaded_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     return df
+
+
+def classify_racial_group(value: object) -> str:
+    code = str(value).strip()
+    if code in {"2", "4"}:
+        return "Maes negras"
+    if code in {"1", "3", "5"}:
+        return "Maes nao negras"
+    return "Ignorado/sem informacao"
+
+
+def classify_sinan_schooling(value: object) -> str:
+    code = str(value).strip()
+    if code in {"02", "03", "04", "05"}:
+        return "Ate 7 anos de estudo"
+    if code in {"06", "07", "08"}:
+        return "8 anos ou mais de estudo"
+    return "Ignorada/sem informacao"
+
+
+def classify_sinan_prenatal(value: object) -> str:
+    code = str(value).strip()
+    if code == "1":
+        return "Com pre-natal"
+    if code == "2":
+        return "Sem pre-natal"
+    return "Ignorado/sem informacao"
