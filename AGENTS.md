@@ -5,7 +5,7 @@ Este repositório contém um projeto de dados sobre sífilis congênita em Porto
 ## Princípios
 
 - Preserve o foco técnico e analítico do projeto.
-- Não adicione linguagem promocional ou referências a entregas externas.
+- Não adicione linguagem promocional ou referências a obrigações externas ao projeto.
 - Mantenha a documentação em português e inglês quando houver resultados, consultas ou mudanças de uso.
 - Use commits pequenos, incrementais e em Conventional Commits, com mensagens em português.
 - Não remova `docs/references/anteprojeto_sifilis_congenita_poars.pdf`; ele é a referência conceitual preservada.
