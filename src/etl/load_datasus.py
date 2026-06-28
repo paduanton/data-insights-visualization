@@ -63,7 +63,8 @@ def main() -> None:
     print(f"Carregando bronze.sinasc_nascidos_vivos: {len(sinasc)} linhas")
     load_table(engine, sinasc, "bronze", "sinasc_nascidos_vivos", args.year)
 
-    execute_sql_file(engine, ROOT / "database/init/002_views.sql")
+    execute_sql_file(engine, ROOT / "database/init/010_silver_views.sql")
+    execute_sql_file(engine, ROOT / "database/init/020_gold_views.sql")
     run_validation(engine, strict=args.strict)
 
 
