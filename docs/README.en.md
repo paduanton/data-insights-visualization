@@ -87,6 +87,9 @@ Initial queries:
 - `database/queries/02_indicadores_municipio.sql`: incidence per 1,000 live births.
 - `database/queries/03_desigualdades_prenatal_escolaridade.sql`: education among cases without prenatal care by racial group.
 - `database/queries/04_qualidade_registros.sql`: percentage of ignored records by critical variable.
+- `database/queries/05_incidencia_por_grupo_racial.sql`: estimated incidence by maternal racial group.
+- `database/queries/06_prenatal_por_grupo_racial.sql`: prenatal care status by maternal racial group.
+- `database/queries/07_diagnostico_materno_por_grupo_racial.sql`: maternal diagnosis timing by racial group.
 
 Each new query must answer an explicit analytical question and, when it produces a relevant result, it must be documented in this file and in `docs/README.pt-BR.md`.
 
@@ -94,15 +97,32 @@ Each new query must answer an explicit analytical question and, when it produces
 
 Notebooks should live in `notebooks/analytics/` and answer specific analytical questions. The existing visualization notebook remains as an initial project reference.
 
+Initial notebooks:
+
+- `notebooks/analytics/01_overview_sifilis_congenita.ipynb`: Porto Alegre subset overview and general incidence.
+- `notebooks/analytics/02_prenatal_raca_escolaridade.ipynb`: prenatal care, race/color, and education cross-analysis.
+
 ## Results
 
 Existing visualization:
 
 - `outputs/images/graficos/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png`
 
+Initial validated results for 2024:
+
+- SINAN/SIFCBR: `12762` records in Rio Grande do Sul.
+- SINASC: `111988` records in Rio Grande do Sul.
+- Porto Alegre: `137` congenital syphilis cases and `12850` live births.
+- Estimated general incidence: `10.66` cases per 1,000 live births.
+- Cases without prenatal care: `10` among Black mothers and `14` among non-Black mothers.
+
 Images for new results should be added under:
 
 - `docs/assets/results/`
+
+Recommended image for the next result:
+
+- `docs/assets/results/incidencia_por_grupo_racial.png`
 
 ## Limitations
 

@@ -87,6 +87,9 @@ Consultas iniciais:
 - `database/queries/02_indicadores_municipio.sql`: incidência por 1.000 nascidos vivos.
 - `database/queries/03_desigualdades_prenatal_escolaridade.sql`: escolaridade nos casos sem pré-natal por grupo racial.
 - `database/queries/04_qualidade_registros.sql`: percentual de registros ignorados por variável crítica.
+- `database/queries/05_incidencia_por_grupo_racial.sql`: incidência estimada por grupo racial materno.
+- `database/queries/06_prenatal_por_grupo_racial.sql`: realização de pré-natal por grupo racial materno.
+- `database/queries/07_diagnostico_materno_por_grupo_racial.sql`: momento do diagnóstico materno por grupo racial.
 
 Cada nova consulta deve responder uma pergunta analítica explícita e, quando gerar resultado relevante, deve ser documentada neste arquivo e em `docs/README.en.md`.
 
@@ -94,15 +97,32 @@ Cada nova consulta deve responder uma pergunta analítica explícita e, quando g
 
 Os notebooks devem ficar em `notebooks/analytics/` e responder perguntas analíticas específicas. O notebook de visualização existente permanece como referência inicial do projeto.
 
+Notebooks iniciais:
+
+- `notebooks/analytics/01_overview_sifilis_congenita.ipynb`: panorama do recorte Porto Alegre e incidência geral.
+- `notebooks/analytics/02_prenatal_raca_escolaridade.ipynb`: cruzamento entre pré-natal, raça/cor e escolaridade.
+
 ## Resultados
 
 Visualização já produzida:
 
 - `outputs/images/graficos/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png`
 
+Resultados iniciais validados para 2024:
+
+- SINAN/SIFCBR: `12762` registros no Rio Grande do Sul.
+- SINASC: `111988` registros no Rio Grande do Sul.
+- Porto Alegre: `137` casos de sífilis congênita e `12850` nascidos vivos.
+- Incidência geral estimada: `10,66` casos por 1.000 nascidos vivos.
+- Casos sem pré-natal: `10` entre mães negras e `14` entre mães não negras.
+
 Imagens de novos resultados devem ser adicionadas em:
 
 - `docs/assets/results/`
+
+Imagem recomendada para o próximo resultado:
+
+- `docs/assets/results/incidencia_por_grupo_racial.png`
 
 ## Limitações
 
