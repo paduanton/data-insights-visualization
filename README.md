@@ -1,44 +1,33 @@
-# Laboratório 3 - Computação Gráfica e Visualização I (INF01047) - INF/UFRGS
+# Sífilis Congênita em Porto Alegre
 
-## O que você deve fazer
+Projeto de dados para análise de sífilis congênita em Porto Alegre, com foco em desigualdades raciais, acesso ao pré-natal e perfil materno. O repositório combina microdados públicos do DATASUS, pipeline ETL em Python, PostgreSQL, consultas SQL e notebooks analíticos.
 
-1) Realize as tarefas listadas no arquivo [TAREFAS.md](TAREFAS.md)
-2) Preencha o [RELATORIO.md](RELATORIO.md)
-3) Verifique se você fez tudo necessário olhando o [CHECKLIST.md](CHECKLIST.md)
+Documentação completa:
 
-### Prazo para entrega: 17-junho-2026
+- [Português](docs/README.pt-BR.md)
+- [English](docs/README.en.md)
 
-## **REGRAS IMPORTANTES**
+## Execução Rápida
 
-> [!CAUTION]
-> - Uso de IA: você pode usar ferramentas de IA livremente, **exceto para escrever o relatório de entrega**
-> - Colaboração com colegas: você pode conversar com outros colegas e trocar ideias, mas **não podem fazer compartilhamento e troca de arquivos (prompts, código, imagens, etc.)**
-> - **Não modifique** os arquivos `README.md` e `TAREFAS.md`, para evitar conflitos caso o professor tenha que atualizar as instruções da atividade
+```bash
+docker compose up -d
+python -m pip install -r requirements.txt
+python -m src.etl.load_datasus --strict
+```
 
-## Sugestão de ferramenta
+## English
 
-Você é livre para utilizar qualquer ferramenta que queira usar, **desde que seja baseada em alguma linguagem de programação**. Seguem algumas sugestões:
+Data project for congenital syphilis analysis in Porto Alegre, focused on racial inequalities, prenatal care access, and maternal profile. The repository combines public DATASUS microdata, a Python ETL pipeline, PostgreSQL, SQL queries, and analytical notebooks.
 
-### Google Colab
+Full documentation:
 
-O mais simples é utilizar notebooks `ipynb` através do Google Colaboratory ( https://colab.research.google.com/ ). Suporta notebooks em linguagem Python e também R, com várias bibliotecas já instaladas. Também, possui a vantagem e ter integrado o Gemini para auxiliar da criação do código fonte.
+- [Português](docs/README.pt-BR.md)
+- [English](docs/README.en.md)
 
-#### Login no Google Colab com Gsuite/UFRGS (opcional)
+## Quick Start
 
-Ao invés de usar sua conta Google pessoal, você pode ativar seu e-mail `<cartão>@ufrgs.br` e fazer login no Google Colab usando sua conta da UFRGS. Siga as instruções aqui:
-
-https://www1.ufrgs.br/CatalogoServicos/servicos/servico?servico=3316
-
-#### Google Colab + GitHub
-
-O Colab permite criar notebooks que ficam salvos no Google Drive, ou também abrir notebooks diretamente do GitHub. Exemplo: o código em [./exemplo/plot.ipynb](./exemplo/plot.ipynb) pode ser visto e executado no colab através deste link:
-
-https://colab.research.google.com/github/cgvis-inf-ufrgs/cgvis-lab3-visualizacao-template/blob/main/exemplo/plot.ipynb
-
-Você também pode abrir um notebook em um repositório GitHub privado seu, veja instruções em:
-
-https://colab.research.google.com/github/googlecolab/colabtools/blob/main/notebooks/colab-github-demo.ipynb
-
-### Container local com Python + R + jupyter lab + vscode web + Rstudio
-
-Siga as instruções em https://github.com/cgvis-inf-ufrgs/cgvis-dev-env
+```bash
+docker compose up -d
+python -m pip install -r requirements.txt
+python -m src.etl.load_datasus --strict
+```
