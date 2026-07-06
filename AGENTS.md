@@ -49,3 +49,9 @@ Este repositório contém um projeto de dados sobre sífilis congênita em Porto
 - Prefira escopos quando eles ajudarem a entender a área alterada, por exemplo `docs`, `etl`, `sql`, `notebooks` ou `tests`.
 - Faça commits pequenos e coerentes com a evolução do projeto.
 - Antes de sugerir ou criar commit, revise `git status` e `git diff` para manter a mensagem alinhada ao conteúdo real.
+- Após blocos relevantes de alteração, apresente:
+  - mini resumo do que mudou;
+  - arquivos alterados, com explicação breve de cada um;
+  - sugestão de commit com prefixo Conventional Commits;
+  - pergunta objetiva pedindo aprovação antes de executar o commit.
+- Execute `git commit` somente quando houver aprovação explícita do usuário.
