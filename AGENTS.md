@@ -39,7 +39,7 @@ Este repositório contém um projeto de dados sobre sífilis congênita em Porto
   - notebook: `notebooks/analytics/<nome>.ipynb`;
   - Colab: `https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/<nome>.ipynb`;
   - imagem: `docs/assets/results/<nome-do-resultado>.png`.
-- O notebook de visualização principal pode usar imagem em `outputs/images/graficos/` quando o arquivo for resultado direto de geração local.
+- O notebook de visualização principal pode usar imagem em `outputs/images/graphs/` quando o arquivo for resultado direto de geração local.
 - Resultados visuais publicados na documentação devem apontar para imagens em `docs/assets/results/` ou `outputs/images/`, conforme finalidade.
 - Ao criar uma análise que dependa de imagem, indique o caminho exato onde a imagem deve ser adicionada.
 
