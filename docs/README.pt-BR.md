@@ -30,6 +30,15 @@ Fonte auxiliar para inventário e validação:
 
 - Base dos Dados via `basedosdados` e `google-cloud-bigquery`, com auditoria de tabelas BigQuery úteis para SINASC, SIM, CNES, população municipal, SIH e referência técnica SINAN.
 
+Estrutura para consolidação histórica:
+
+- `data/raw/sinan/sifilis_congenita/`: arquivos `SIFCBR*.dbc`.
+- `data/raw/sinasc/`: arquivos `DNRS*.dbc`.
+- `data/raw/cnes/st/`: arquivos CNES `STRS*.dbc`.
+- `data/raw/sim/do/`: arquivos SIM `DORS*.dbc`.
+- `data/staging/`: conversões exploratórias.
+- `data/profiles/`: perfis gerados antes do schema final.
+
 Arquivos originais preservados:
 
 - `data/raw/archives/sinasc_rs_2024_dn.zip`
@@ -75,6 +84,14 @@ python -m src.etl.load_datasus --strict
 
 O modo `--strict` valida as contagens esperadas dos arquivos 2024 incluídos no repositório.
 
+Para carga multi-ano, use:
+
+```bash
+python -m src.etl.load_datasus --years 2014:2024
+```
+
+O comando multi-ano procura arquivos na estrutura histórica planejada e também preserva fallback para o MVP 2024 atual.
+
 ## Pipeline ETL
 
 O ETL converte arquivos `.dbc` para `.dbf`, lê os registros com `dbfread`, normaliza nomes de colunas e carrega os dados no PostgreSQL. A carga é idempotente por ano: ao recarregar o mesmo ano, os registros anteriores daquele ano são substituídos.
@@ -82,6 +99,14 @@ O ETL converte arquivos `.dbc` para `.dbf`, lê os registros com `dbfread`, norm
 Imagem a adicionar:
 
 - `docs/assets/etl-flow.png`
+
+Antes do schema analítico final, gere perfis exploratórios:
+
+```bash
+python -m src.etl.profile_datasus --years 2014:2024
+```
+
+Os perfis são salvos em `data/profiles/` e devem orientar a decisão de colunas, categorias e views finais.
 
 ## Consultas
 
@@ -103,9 +128,11 @@ Os notebooks devem ficar em `notebooks/analytics/` e responder perguntas analít
 
 Notebooks iniciais:
 
+- `notebooks/analytics/00_validacao_ambiente_dados.ipynb`: validação de ambiente, Docker, testes e carga strict.
 - `notebooks/analytics/01_overview_sifilis_congenita.ipynb`: panorama do recorte Porto Alegre e incidência geral.
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb`: auditoria de cobertura, custo e uso possível da Base dos Dados.
 - `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb`: cruzamento entre pré-natal, raça/cor e escolaridade.
+- `notebooks/analytics/04_perfil_colunas_qualidade.ipynb`: profiling das colunas e variáveis críticas antes do schema final.
 
 ## Referência Dos Notebooks
 
@@ -114,9 +141,11 @@ Cada notebook deve ser executado a partir da raiz do repositório ou pelo Google
 | Notebook | Pergunta principal | Google Colab | Imagem do resultado |
 | --- | --- | --- | --- |
 | `notebooks/visualizacao_sifilis_congenita_poars.ipynb` | Dentro dos casos de sífilis congênita sem pré-natal em Porto Alegre, como a escolaridade materna se distribui por grupo racial? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/visualizacao_sifilis_congenita_poars.ipynb) | `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png` |
+| `notebooks/analytics/00_validacao_ambiente_dados.ipynb` | O ambiente consegue reproduzir o MVP 2024 antes da expansão histórica? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/00_validacao_ambiente_dados.ipynb) | `docs/assets/results/validacao_ambiente_dados.png` |
 | `notebooks/analytics/01_overview_sifilis_congenita.ipynb` | Qual é o panorama de casos notificados, nascidos vivos e incidência geral em Porto Alegre? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/01_overview_sifilis_congenita.ipynb) | `docs/assets/results/overview_sifilis_congenita.png` |
 | `notebooks/analytics/02_auditoria_basedosdados.ipynb` | Quais tabelas da Base dos Dados podem complementar ou validar as bases DATASUS do projeto? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/02_auditoria_basedosdados.ipynb) | `docs/assets/results/auditoria_basedosdados_periodos.png` |
 | `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb` | Como pré-natal, raça/cor e escolaridade se combinam nos casos notificados? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/03_prenatal_raca_escolaridade.ipynb) | `docs/assets/results/prenatal_raca_escolaridade.png` |
+| `notebooks/analytics/04_perfil_colunas_qualidade.ipynb` | Quais colunas e variáveis críticas sustentam o schema analítico final? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/04_perfil_colunas_qualidade.ipynb) | `docs/assets/results/perfil_colunas_qualidade.png` |
 
 Ao criar um novo notebook, adicione uma nova linha nesta tabela e mantenha a mesma atualização em `docs/README.en.md`. A imagem do resultado deve ser salva em `docs/assets/results/` quando fizer parte da documentação do projeto, ou em `outputs/images/` quando for uma saída operacional do notebook.
 
@@ -142,6 +171,7 @@ Imagem recomendada para o próximo resultado:
 
 - `docs/assets/results/incidencia_por_grupo_racial.png`
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
+- `docs/assets/results/perfil_colunas_qualidade.png`
 
 ## Limitações
 

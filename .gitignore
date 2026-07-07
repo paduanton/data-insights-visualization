@@ -30,6 +30,12 @@ build/
 postgres_data/
 *.log
 
+# Generated data products
+data/profiles/*
+!data/profiles/.gitkeep
+data/staging/*
+!data/staging/.gitkeep
+
 # Temporary files
 tmp/
 temp/
