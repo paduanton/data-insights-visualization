@@ -26,6 +26,10 @@ Sources preserved for expansion:
 - `data/raw/sim/DOFET24.dbc`: SIM 2024, fetal deaths.
 - `data/raw/sim/DOMAT24.dbc`: SIM 2024, maternal deaths.
 
+Auxiliary source for inventory and validation:
+
+- Base dos Dados through `basedosdados` and `google-cloud-bigquery`, with auditing of useful BigQuery tables for SINASC, SIM, CNES, municipal population, SIH, and SINAN technical reference.
+
 Original archives preserved:
 
 - `data/raw/archives/sinasc_rs_2024_dn.zip`
@@ -100,7 +104,8 @@ Notebooks should live in `notebooks/analytics/` and answer specific analytical q
 Initial notebooks:
 
 - `notebooks/analytics/01_overview_sifilis_congenita.ipynb`: Porto Alegre subset overview and general incidence.
-- `notebooks/analytics/02_prenatal_raca_escolaridade.ipynb`: prenatal care, race/color, and education cross-analysis.
+- `notebooks/analytics/02_auditoria_basedosdados.ipynb`: coverage, cost, and possible-use audit for Base dos Dados.
+- `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb`: prenatal care, race/color, and education cross-analysis.
 
 ## Notebook Reference
 
@@ -110,7 +115,8 @@ Each notebook should be run from the repository root or through Google Colab. Wh
 | --- | --- | --- | --- |
 | `notebooks/visualizacao_sifilis_congenita_poars.ipynb` | Among congenital syphilis cases without prenatal care in Porto Alegre, how is maternal education distributed by racial group? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/visualizacao_sifilis_congenita_poars.ipynb) | `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png` |
 | `notebooks/analytics/01_overview_sifilis_congenita.ipynb` | What is the overview of reported cases, live births, and general incidence in Porto Alegre? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/01_overview_sifilis_congenita.ipynb) | `docs/assets/results/overview_sifilis_congenita.png` |
-| `notebooks/analytics/02_prenatal_raca_escolaridade.ipynb` | How do prenatal care, race/color, and education combine across reported cases? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/02_prenatal_raca_escolaridade.ipynb) | `docs/assets/results/prenatal_raca_escolaridade.png` |
+| `notebooks/analytics/02_auditoria_basedosdados.ipynb` | Which Base dos Dados tables can complement or validate the project's DATASUS sources? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/02_auditoria_basedosdados.ipynb) | `docs/assets/results/auditoria_basedosdados_periodos.png` |
+| `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb` | How do prenatal care, race/color, and education combine across reported cases? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/03_prenatal_raca_escolaridade.ipynb) | `docs/assets/results/prenatal_raca_escolaridade.png` |
 
 When creating a new notebook, add a new row to this table and apply the same update to `docs/README.pt-BR.md`. The result image should be saved under `docs/assets/results/` when it is part of the project documentation, or under `outputs/images/` when it is an operational notebook output.
 
@@ -135,6 +141,7 @@ Images for new results should be added under:
 Recommended image for the next result:
 
 - `docs/assets/results/incidencia_por_grupo_racial.png`
+- `docs/assets/results/auditoria_basedosdados_periodos.png`
 
 ## Limitations
 
