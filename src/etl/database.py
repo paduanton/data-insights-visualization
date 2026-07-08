@@ -16,6 +16,24 @@ def execute_sql_file(engine, path: Path) -> None:
         connection.exec_driver_sql(sql)
 
 
+def copy_dataframe(engine, df: pd.DataFrame, schema: str, table: str) -> None:
+    qualified_table = f"{quote_identifier(schema)}.{quote_identifier(table)}"
+    columns = ", ".join(quote_identifier(column) for column in df.columns)
+    query = f"COPY {qualified_table} ({columns}) FROM STDIN"
+    raw_connection = engine.raw_connection()
+    try:
+        with raw_connection.cursor() as cursor:
+            with cursor.copy(query) as copy:
+                for row in df.itertuples(index=False, name=None):
+                    copy.write_row(row)
+        raw_connection.commit()
+    except Exception:
+        raw_connection.rollback()
+        raise
+    finally:
+        raw_connection.close()
+
+
 def load_table(engine, df: pd.DataFrame, schema: str, table: str, year: int) -> None:
     inspector = inspect(engine)
     dtype = {column: Text() for column in df.columns}
@@ -35,16 +53,7 @@ def load_table(engine, df: pd.DataFrame, schema: str, table: str, year: int) -> 
     with engine.begin() as connection:
         connection.execute(text(f"DELETE FROM {schema}.{table} WHERE source_year = :year"), {"year": year})
 
-    df.to_sql(
-        table,
-        engine,
-        schema=schema,
-        if_exists="append",
-        index=False,
-        dtype=dtype,
-        chunksize=2000,
-        method="multi",
-    )
+    copy_dataframe(engine, df, schema, table)
 
 
 def query_scalar(engine, sql: str):
