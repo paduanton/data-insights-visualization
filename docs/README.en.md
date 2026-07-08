@@ -178,6 +178,8 @@ Initial queries:
 - `database/queries/07_diagnostico_materno_por_grupo_racial.sql`: maternal diagnosis timing by racial group.
 - `database/queries/08_razao_incidencia_grupo_racial.sql`: incidence ratio between Black and non-Black mothers.
 - `database/queries/09_inventario_campos_cuidado_materno.sql`: inspection of candidate fields for prenatal care, diagnosis, treatment, education, age, and race/color.
+- `database/queries/10_contexto_cnes_municipio.sql`: annual CNES facility context by municipality.
+- `database/queries/11_contexto_sim_municipio.sql`: general deaths and `A50` underlying cause in SIM by municipality of residence.
 
 Each new query must answer an explicit analytical question and, when it produces a relevant result, it must be documented in this file and in `docs/README.pt-BR.md`.
 

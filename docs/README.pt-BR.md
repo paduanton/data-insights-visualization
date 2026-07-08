@@ -178,6 +178,8 @@ Consultas iniciais:
 - `database/queries/07_diagnostico_materno_por_grupo_racial.sql`: momento do diagnóstico materno por grupo racial.
 - `database/queries/08_razao_incidencia_grupo_racial.sql`: razão de incidência entre mães negras e mães não negras.
 - `database/queries/09_inventario_campos_cuidado_materno.sql`: inspeção de campos candidatos para pré-natal, diagnóstico, tratamento, escolaridade, idade e raça/cor.
+- `database/queries/10_contexto_cnes_municipio.sql`: contexto anual de estabelecimentos CNES por município.
+- `database/queries/11_contexto_sim_municipio.sql`: óbitos gerais e causa básica `A50` no SIM por município de residência.
 
 Cada nova consulta deve responder uma pergunta analítica explícita e, quando gerar resultado relevante, deve ser documentada neste arquivo e em `docs/README.en.md`.
 

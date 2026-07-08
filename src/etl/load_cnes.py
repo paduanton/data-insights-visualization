@@ -48,6 +48,8 @@ def main() -> None:
         print(f"Carregando bronze.cnes_estabelecimentos: {len(cnes)} linhas")
         load_table(engine, cnes, "bronze", "cnes_estabelecimentos", source.year)
 
+    execute_sql_file(engine, ROOT / "database/init/030_cnes_views.sql")
+
 
 if __name__ == "__main__":
     main()

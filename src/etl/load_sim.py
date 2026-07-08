@@ -46,6 +46,8 @@ def main() -> None:
         print(f"Carregando bronze.sim_obitos: {len(sim)} linhas")
         load_table(engine, sim, "bronze", "sim_obitos", source.year)
 
+    execute_sql_file(engine, ROOT / "database/init/031_sim_views.sql")
+
 
 if __name__ == "__main__":
     main()
