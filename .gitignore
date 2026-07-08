@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 .venv/
+.venv-codex/
 venv/
 env/
 
@@ -35,6 +36,12 @@ data/profiles/*
 !data/profiles/.gitkeep
 data/staging/*
 !data/staging/.gitkeep
+data/raw/**
+!data/raw/**/
+!data/raw/**/.gitkeep
+data/ignored/**
+!data/ignored/**/
+!data/ignored/**/.gitkeep
 
 # Temporary files
 tmp/
