@@ -230,6 +230,31 @@ Initial validated results for 2024:
 - Estimated general incidence: `10.66` cases per 1,000 live births.
 - Cases without prenatal care: `10` among Black mothers and `14` among non-Black mothers.
 
+Historical consolidation validated in PostgreSQL for `2015-2024`:
+
+- SINAN/SIFCBR: `233882` notifications in Rio Grande do Sul.
+- SINASC: `1315073` live births in Rio Grande do Sul.
+- CNES/ST: `287630` facility records, using December as the annual snapshot.
+- SIM/DO: `943634` general death records in Rio Grande do Sul.
+- Porto Alegre has an annual incidence series calculated in `gold.indicadores_municipio_ano`.
+
+Validated series for Porto Alegre:
+
+| Year | Cases | Live births | Incidence per 1,000 LB |
+| --- | ---: | ---: | ---: |
+| 2015 | 593 | 19724 | 30.06 |
+| 2016 | 569 | 18635 | 30.53 |
+| 2017 | 610 | 18490 | 32.99 |
+| 2018 | 513 | 17579 | 29.18 |
+| 2019 | 444 | 16520 | 26.88 |
+| 2020 | 466 | 15687 | 29.71 |
+| 2021 | 632 | 14153 | 44.65 |
+| 2022 | 544 | 13679 | 39.77 |
+| 2023 | 307 | 13663 | 22.47 |
+| 2024 | 137 | 12850 | 10.66 |
+
+These results confirm that the historical database is loaded and queryable, but the final analytical schema should still be closed only after reviewing column and quality profiles.
+
 Images for new results should be added under:
 
 - `docs/assets/results/`

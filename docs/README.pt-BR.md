@@ -230,6 +230,31 @@ Resultados iniciais validados para 2024:
 - Incidência geral estimada: `10,66` casos por 1.000 nascidos vivos.
 - Casos sem pré-natal: `10` entre mães negras e `14` entre mães não negras.
 
+Consolidação histórica validada no PostgreSQL para `2015-2024`:
+
+- SINAN/SIFCBR: `233882` notificações no Rio Grande do Sul.
+- SINASC: `1315073` nascidos vivos no Rio Grande do Sul.
+- CNES/ST: `287630` registros de estabelecimentos, usando dezembro como snapshot anual.
+- SIM/DO: `943634` registros de óbitos gerais no Rio Grande do Sul.
+- Porto Alegre possui série anual de incidência calculada em `gold.indicadores_municipio_ano`.
+
+Série validada para Porto Alegre:
+
+| Ano | Casos | Nascidos vivos | Incidência por 1.000 NV |
+| --- | ---: | ---: | ---: |
+| 2015 | 593 | 19724 | 30,06 |
+| 2016 | 569 | 18635 | 30,53 |
+| 2017 | 610 | 18490 | 32,99 |
+| 2018 | 513 | 17579 | 29,18 |
+| 2019 | 444 | 16520 | 26,88 |
+| 2020 | 466 | 15687 | 29,71 |
+| 2021 | 632 | 14153 | 44,65 |
+| 2022 | 544 | 13679 | 39,77 |
+| 2023 | 307 | 13663 | 22,47 |
+| 2024 | 137 | 12850 | 10,66 |
+
+Esses resultados confirmam que a base histórica está carregada e consultável, mas o schema analítico final ainda deve ser fechado após leitura dos perfis de colunas e qualidade.
+
 Imagens de novos resultados devem ser adicionadas em:
 
 - `docs/assets/results/`
