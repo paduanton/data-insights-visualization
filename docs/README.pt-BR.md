@@ -91,6 +91,16 @@ Suba o PostgreSQL:
 docker compose up -d
 ```
 
+O PgAdmin fica disponível em `http://localhost:5050`. Use as credenciais de `PGADMIN_DEFAULT_EMAIL` e `PGADMIN_DEFAULT_PASSWORD` definidas no `.env`; os valores padrão do `.env.example` são `admin@example.com` e `admin`.
+
+Para registrar o banco no PgAdmin, use:
+
+- host: `postgres`
+- porta: `5432`
+- database: `sifilis_analytics`
+- usuário: `postgres`
+- senha: `postgres`
+
 Instale as dependências:
 
 ```bash

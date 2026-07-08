@@ -91,6 +91,16 @@ Start PostgreSQL:
 docker compose up -d
 ```
 
+PgAdmin is available at `http://localhost:5050`. Use `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` from `.env`; the defaults in `.env.example` are `admin@example.com` and `admin`.
+
+To register the database in PgAdmin, use:
+
+- host: `postgres`
+- port: `5432`
+- database: `sifilis_analytics`
+- user: `postgres`
+- password: `postgres`
+
 Install dependencies:
 
 ```bash
