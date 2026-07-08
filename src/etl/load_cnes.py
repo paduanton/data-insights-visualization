@@ -44,7 +44,7 @@ def main() -> None:
         print(f"\nAno de referencia: {source.year}")
         print(f"Lendo CNES/ST: {source.path}")
         cnes = prepare_dataframe(read_dbc(source.path), source.path, source.source, source.year)
-        cnes["source_month"] = f"{args.month:02d}"
+        cnes = cnes.assign(source_month=f"{args.month:02d}")
         print(f"Carregando bronze.cnes_estabelecimentos: {len(cnes)} linhas")
         load_table(engine, cnes, "bronze", "cnes_estabelecimentos", source.year)
 

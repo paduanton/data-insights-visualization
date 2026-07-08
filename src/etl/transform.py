@@ -32,13 +32,17 @@ def normalize_value(value):
 def prepare_dataframe(df: pd.DataFrame, source_path: Path, source_system: str, year: int) -> pd.DataFrame:
     df = df.copy()
     df.columns = normalize_columns(df.columns)
-    for column in df.columns:
-        df[column] = df[column].map(normalize_value)
-    df["source_year"] = year
-    df["source_system"] = source_system
-    df["source_file"] = source_path.name
-    df["loaded_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    return df
+    df = df.map(normalize_value)
+    metadata = pd.DataFrame(
+        {
+            "source_year": year,
+            "source_system": source_system,
+            "source_file": source_path.name,
+            "loaded_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        },
+        index=df.index,
+    )
+    return pd.concat([df, metadata], axis=1)
 
 
 def classify_racial_group(value: object) -> str:
