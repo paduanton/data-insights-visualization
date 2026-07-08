@@ -3,14 +3,8 @@ from __future__ import annotations
 import argparse
 import os
 
-from sqlalchemy import create_engine
-
 from src.config import DEFAULT_DATABASE_URL, ROOT
-from src.etl.database import execute_sql_file, load_table
 from src.etl.datasus_sources import parse_years, resolve_datasus_sources
-from src.etl.dbc import read_dbc
-from src.etl.transform import prepare_dataframe
-from src.etl.validation import run_validation
 
 
 def parse_args() -> argparse.Namespace:
@@ -75,6 +69,13 @@ def main() -> None:
     if missing:
         detail = "\n".join(f"- {item}" for item in missing)
         raise FileNotFoundError(f"Arquivos DATASUS ausentes para a carga solicitada:\n{detail}")
+
+    from sqlalchemy import create_engine
+
+    from src.etl.database import execute_sql_file, load_table
+    from src.etl.dbc import read_dbc
+    from src.etl.transform import prepare_dataframe
+    from src.etl.validation import run_validation
 
     engine = create_engine(args.database_url)
     execute_sql_file(engine, ROOT / "database/init/001_schemas.sql")

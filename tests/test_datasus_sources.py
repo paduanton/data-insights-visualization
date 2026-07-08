@@ -1,4 +1,4 @@
-from src.etl.datasus_sources import parse_years, resolve_datasus_sources
+from src.etl.datasus_sources import parse_years, resolve_cnes_sources, resolve_datasus_sources, resolve_sim_sources
 
 
 def test_parse_years_accepts_single_year_default():
@@ -33,3 +33,19 @@ def test_resolve_datasus_sources_reports_missing_years():
     assert pairs == []
     assert any("SINAN/SIFCBR 2014" in item for item in missing)
     assert any("SINASC 2014" in item for item in missing)
+
+
+def test_resolve_cnes_sources_uses_existing_2024_december_snapshot():
+    sources, missing = resolve_cnes_sources([2024])
+
+    assert missing == []
+    assert len(sources) == 1
+    assert sources[0].path.name == "STRS2412.dbc"
+
+
+def test_resolve_sim_sources_uses_existing_2024_file():
+    sources, missing = resolve_sim_sources([2024])
+
+    assert missing == []
+    assert len(sources) == 1
+    assert sources[0].path.name == "DORS2024.dbc"
