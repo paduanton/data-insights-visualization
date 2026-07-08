@@ -16,15 +16,16 @@ The repository combines:
 
 Core sources:
 
-- `data/raw/SIFCBR24.dbc`: SINAN/SIFCBR 2024, congenital syphilis notifications.
-- `data/raw/sinasc/DNRS2024.dbc`: SINASC 2024, live births in Rio Grande do Sul.
+- `data/raw/sinan/sifilis_congenita/SIFCBR15.dbc` to `data/raw/sinan/sifilis_congenita/SIFCBR24.dbc`: SINAN/SIFCBR 2015-2024, congenital syphilis notifications.
+- `data/raw/sinasc/DNRS2015.dbc` to `data/raw/sinasc/DNRS2024.dbc`: SINASC 2015-2024, live births in Rio Grande do Sul.
 
 Sources preserved for expansion:
 
-- `data/raw/cnes/STRS2401.dbc` to `data/raw/cnes/STRS2412.dbc`: CNES 2024.
-- `data/raw/sim/DORS2024.dbc`: SIM 2024, general deaths.
-- `data/raw/sim/DOFET24.dbc`: SIM 2024, fetal deaths.
-- `data/raw/sim/DOMAT24.dbc`: SIM 2024, maternal deaths.
+- `data/raw/cnes/st/STRS1512.dbc` to `data/raw/cnes/st/STRS2412.dbc`: CNES/ST, December of each year as the annual snapshot.
+- `data/raw/cnes/ep/` and `data/raw/cnes/sr/`: complementary CNES, also filtered to December 2015-2024.
+- `data/raw/sim/do/DORS2015.dbc` to `data/raw/sim/do/DORS2024.dbc`: SIM 2015-2024, general deaths.
+- `data/raw/sim/dofet/`, `data/raw/sim/doinf/`, and `data/raw/sim/domat/`: complementary SIM.
+- `data/raw/populacao_datasus/`: complementary DATASUS/IBGE population.
 
 Auxiliary source for inventory and validation:
 
@@ -35,9 +36,29 @@ Structure for historical consolidation:
 - `data/raw/sinan/sifilis_congenita/`: `SIFCBR*.dbc` files.
 - `data/raw/sinasc/`: `DNRS*.dbc` files.
 - `data/raw/cnes/st/`: CNES `STRS*.dbc` files.
+- `data/raw/cnes/ep/` and `data/raw/cnes/sr/`: complementary December CNES files.
 - `data/raw/sim/do/`: SIM `DORS*.dbc` files.
+- `data/raw/populacao_datasus/`: complementary population files.
+- `data/ignored/`: preserved files outside the main scope.
 - `data/staging/`: exploratory conversions.
 - `data/profiles/`: profiles generated before the final schema.
+
+Consolidated inventory for the `2015-2024` window:
+
+- `docs/inventario_bases.md`: main coverage, selected CNES files, and summary of preserved/ignored files.
+- `data/profiles/datasus_file_inventory.csv`: detailed inventory generated locally.
+
+To check missing files in the current cut:
+
+```bash
+python -m src.etl.inventory_datasus --years 2015:2024 --missing-only --output data/profiles/datasus_missing_files_2015_2024.csv
+```
+
+To regenerate the detailed inventory:
+
+```bash
+python -m src.etl.inventory_datasus --years 2015:2024 --scan-files --output data/profiles/datasus_file_inventory.csv --docs-output docs/inventario_bases.md
+```
 
 Original archives preserved:
 
@@ -87,14 +108,33 @@ The `--strict` mode validates the expected counts for the 2024 files included in
 For multi-year loads, use:
 
 ```bash
-python -m src.etl.load_datasus --years 2014:2024
+python -m src.etl.load_datasus --years 2015:2024
 ```
 
 The multi-year command searches the planned historical structure and also preserves fallback paths for the current 2024 MVP.
 
+Before downloading new files, generate an inventory:
+
+```bash
+python -m src.etl.inventory_datasus --years 2015:2024
+```
+
+For a manual download list, use:
+
+```bash
+python -m src.etl.inventory_datasus --years 2015:2024 --missing-only --format markdown --output data/profiles/datasus_missing_files_2015_2024.md
+```
+
+For complementary sources validated through profiling, separate bronze loaders are available:
+
+```bash
+python -m src.etl.load_cnes --years 2015:2024 --month 12
+python -m src.etl.load_sim --years 2015:2024
+```
+
 ## ETL Pipeline
 
-The ETL converts `.dbc` files to `.dbf`, reads records with `dbfread`, normalizes column names, and loads the data into PostgreSQL. The load is idempotent by year: when the same year is loaded again, previous records for that year are replaced.
+The ETL converts `.dbc` files to `.dbf`, reads records with `dbfread`, normalizes column names, and loads the data into PostgreSQL. The load is idempotent by year: when the same year is loaded again, previous records for that year are replaced. In `bronze` tables, new columns found in later years are added as `TEXT`, preserving microdata variations until the final schema decision.
 
 Image to add:
 
@@ -103,7 +143,14 @@ Image to add:
 Before the final analytical schema, generate exploratory profiles:
 
 ```bash
-python -m src.etl.profile_datasus --years 2014:2024
+python -m src.etl.profile_datasus --years 2015:2024
+```
+
+To include complementary sources in profiling:
+
+```bash
+python -m src.etl.profile_datasus --years 2015:2024 --skip-core --include-cnes --output data/profiles/cnes_st_column_profile_2015_2024.csv
+python -m src.etl.profile_datasus --years 2015:2024 --skip-core --include-sim --output data/profiles/sim_do_column_profile_2015_2024.csv
 ```
 
 Profiles are saved under `data/profiles/` and should guide final column, category, and view decisions.
@@ -119,6 +166,8 @@ Initial queries:
 - `database/queries/05_incidencia_por_grupo_racial.sql`: estimated incidence by maternal racial group.
 - `database/queries/06_prenatal_por_grupo_racial.sql`: prenatal care status by maternal racial group.
 - `database/queries/07_diagnostico_materno_por_grupo_racial.sql`: maternal diagnosis timing by racial group.
+- `database/queries/08_razao_incidencia_grupo_racial.sql`: incidence ratio between Black and non-Black mothers.
+- `database/queries/09_inventario_campos_cuidado_materno.sql`: inspection of candidate fields for prenatal care, diagnosis, treatment, education, age, and race/color.
 
 Each new query must answer an explicit analytical question and, when it produces a relevant result, it must be documented in this file and in `docs/README.pt-BR.md`.
 
@@ -133,6 +182,10 @@ Initial notebooks:
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb`: coverage, cost, and possible-use audit for Base dos Dados.
 - `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb`: prenatal care, race/color, and education cross-analysis.
 - `notebooks/analytics/04_perfil_colunas_qualidade.ipynb`: column and critical-variable profiling before the final schema.
+- `notebooks/analytics/05_serie_historica_incidencia.ipynb`: annual incidence trend in Porto Alegre.
+- `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb`: incidence and incidence ratio by racial group.
+- `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: maternal diagnosis and basis for treatment analysis.
+- `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventory and contextual use of CNES, IBGE, and SIM.
 
 ## Notebook Reference
 
@@ -146,6 +199,10 @@ Each notebook should be run from the repository root or through Google Colab. Wh
 | `notebooks/analytics/02_auditoria_basedosdados.ipynb` | Which Base dos Dados tables can complement or validate the project's DATASUS sources? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/02_auditoria_basedosdados.ipynb) | `docs/assets/results/auditoria_basedosdados_periodos.png` |
 | `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb` | How do prenatal care, race/color, and education combine across reported cases? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/03_prenatal_raca_escolaridade.ipynb) | `docs/assets/results/prenatal_raca_escolaridade.png` |
 | `notebooks/analytics/04_perfil_colunas_qualidade.ipynb` | Which columns and critical variables support the final analytical schema? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/04_perfil_colunas_qualidade.ipynb) | `docs/assets/results/perfil_colunas_qualidade.png` |
+| `notebooks/analytics/05_serie_historica_incidencia.ipynb` | How does congenital syphilis incidence evolve across loaded years? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/05_serie_historica_incidencia.ipynb) | `docs/assets/results/serie_historica_incidencia.png` |
+| `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb` | Does estimated incidence differ between Black and non-Black mothers? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/06_desigualdade_racial_incidencia.ipynb) | `docs/assets/results/desigualdade_racial_incidencia.png` |
+| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Does maternal diagnosis timing indicate differences in recorded care? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png` |
+| `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Which complementary sources can contextualize service supply, population, and outcomes? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
 
 When creating a new notebook, add a new row to this table and apply the same update to `docs/README.pt-BR.md`. The result image should be saved under `docs/assets/results/` when it is part of the project documentation, or under `outputs/images/` when it is an operational notebook output.
 
@@ -170,8 +227,12 @@ Images for new results should be added under:
 Recommended image for the next result:
 
 - `docs/assets/results/incidencia_por_grupo_racial.png`
+- `docs/assets/results/razao_incidencia_grupo_racial.png`
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
 - `docs/assets/results/perfil_colunas_qualidade.png`
+- `docs/assets/results/serie_historica_incidencia.png`
+- `docs/assets/results/desigualdade_racial_incidencia.png`
+- `docs/assets/results/diagnostico_materno_grupo_racial.png`
 
 ## Limitations
 
