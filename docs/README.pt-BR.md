@@ -259,7 +259,7 @@ Cada notebook deve ser executado a partir da raiz do repositório ou pelo Google
 
 | Notebook | Pergunta principal | Google Colab | Imagem do resultado |
 | --- | --- | --- | --- |
-| `notebooks/visualizacao_sifilis_congenita_poars.ipynb` | Dentro dos casos de sífilis congênita sem pré-natal em Porto Alegre, como a escolaridade materna se distribui por grupo racial? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/visualizacao_sifilis_congenita_poars.ipynb) | `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png` |
+| `notebooks/visualizacao_sifilis_congenita_poars.ipynb` | Dentro dos casos de sífilis congênita sem pré-natal em Porto Alegre, como a escolaridade materna se distribui por grupo racial? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/visualizacao_sifilis_congenita_poars.ipynb) | `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png`<br>`docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png` |
 | `notebooks/analytics/00_validacao_ambiente_dados.ipynb` | O ambiente consegue reproduzir o MVP 2024 antes da expansão histórica? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/00_validacao_ambiente_dados.ipynb) | `docs/assets/results/validacao_ambiente_dados.png` |
 | `notebooks/analytics/01_overview_sifilis_congenita.ipynb` | Qual é o panorama de casos notificados, nascidos vivos e incidência geral em Porto Alegre? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/01_overview_sifilis_congenita.ipynb) | `docs/assets/results/overview_sifilis_congenita.png` |
 | `notebooks/analytics/02_auditoria_basedosdados.ipynb` | Quais tabelas da Base dos Dados podem complementar ou validar as bases DATASUS do projeto? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/02_auditoria_basedosdados.ipynb) | `docs/assets/results/auditoria_basedosdados_periodos.png` |
@@ -281,6 +281,7 @@ Ao criar um novo notebook, adicione uma nova linha nesta tabela e mantenha a mes
 Visualização já produzida:
 
 - `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png`
+- `docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png`
 
 Resultados iniciais validados para 2024:
 
@@ -330,6 +331,7 @@ Imagens geradas:
 - `docs/assets/results/serie_historica_incidencia.png`
 - `docs/assets/results/desigualdade_racial_incidencia.png`
 - `docs/assets/results/razao_incidencia_grupo_racial.png`
+- `docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
 - `docs/assets/results/tratamento_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
@@ -344,6 +346,7 @@ Imagens finais para relatório:
 - `outputs/images/final_report/razao_incidencia_racial.png`
 - `outputs/images/final_report/incidencia_raca_cor_detalhada.png`
 - `outputs/images/final_report/prenatal_grupo_racial.png`
+- `outputs/images/final_report/escolaridade_sem_prenatal_grupo_racial.png`
 - `outputs/images/final_report/diagnostico_materno_grupo_racial.png`
 - `outputs/images/final_report/tratamento_materno_grupo_racial.png`
 - `outputs/images/final_report/perfil_maes_negras_escolaridade_idade.png`
@@ -354,6 +357,7 @@ Leitura da camada final:
 
 - A razão de incidência entre mães negras e mães não negras permanece acima de `1` em todos os anos carregados.
 - Em `2024`, a incidência entre mães negras foi `1,54` vez a incidência entre mães não negras, com diferença absoluta de `4,95` casos por 1.000 nascidos vivos.
+- Entre os casos sem pré-natal de `2015-2024`, mães negras somaram `259` registros e mães não negras `399`; a baixa escolaridade, definida como até 7 anos de estudo, apareceu em `23,9%` dos casos de mães negras (`n=62`) e `14,3%` dos casos de mães não negras (`n=57`).
 - Em `2024`, o tratamento materno inadequado foi registrado em `98,2%` dos casos de mães negras e em `85,0%` dos casos de mães não negras em Porto Alegre.
 - A análise por raça/cor detalhada confirma incidência maior em mães pretas e pardas do que em mães brancas na maior parte da série; categorias amarela, indígena e ignorada têm denominadores baixos e são tratadas como complemento exploratório.
 - A análise interseccional é descritiva: o marcador de maior vulnerabilidade combina baixa ou ignorada escolaridade com ao menos um registro de cuidado ausente, tardio, inadequado ou ignorado.

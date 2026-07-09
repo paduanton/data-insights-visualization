@@ -16,7 +16,8 @@ Em `2024`, a incidência entre mães negras foi `1,54` vez a incidência entre m
 - A série geral de Porto Alegre foi validada para `2015-2024` em `gold.indicadores_municipio_ano`.
 - Em `2024`, Porto Alegre teve `137` casos de sífilis congênita e `12850` nascidos vivos, com incidência geral de `10,66` por `1.000` nascidos vivos.
 - Em `2024`, o tratamento materno inadequado foi registrado em `98,2%` dos casos de mães negras e `85,0%` dos casos de mães não negras.
-- A análise interseccional mostrou marcador de maior vulnerabilidade em `44,8%` dos casos de mães negras (`n=791`) e `40,3%` dos casos de mães não negras (`n=1023`).
+- A análise interseccional mostrou marcador de maior vulnerabilidade em `44,8%` dos casos de mães negras (`n=791` de `1764`) e `40,3%` dos casos de mães não negras (`n=1023` de `2539`).
+- Entre os casos sem pré-natal de `2015-2024`, mães negras somaram `259` registros e mães não negras `399`; a baixa escolaridade, definida como até 7 anos de estudo, apareceu em `23,9%` dos casos de mães negras (`n=62`) e `14,3%` dos casos de mães não negras (`n=57`).
 
 ## Resultados Complementares
 
@@ -33,6 +34,7 @@ Resultados em `docs/assets/results/`:
 - `docs/assets/results/serie_historica_incidencia.png`
 - `docs/assets/results/desigualdade_racial_incidencia.png`
 - `docs/assets/results/razao_incidencia_grupo_racial.png`
+- `docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
 - `docs/assets/results/tratamento_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
@@ -45,6 +47,7 @@ Imagens finais em `outputs/images/final_report/`:
 - `outputs/images/final_report/razao_incidencia_racial.png`
 - `outputs/images/final_report/incidencia_raca_cor_detalhada.png`
 - `outputs/images/final_report/prenatal_grupo_racial.png`
+- `outputs/images/final_report/escolaridade_sem_prenatal_grupo_racial.png`
 - `outputs/images/final_report/diagnostico_materno_grupo_racial.png`
 - `outputs/images/final_report/tratamento_materno_grupo_racial.png`
 - `outputs/images/final_report/perfil_maes_negras_escolaridade_idade.png`

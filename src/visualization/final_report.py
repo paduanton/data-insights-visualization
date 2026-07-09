@@ -192,6 +192,101 @@ def plot_prenatal(engine, output_dir: Path) -> Path:
     return savefig(fig, output_dir / "prenatal_grupo_racial.png")
 
 
+def plot_schooling_without_prenatal(engine, output_dir: Path) -> Path:
+    query = """
+    SELECT
+        grupo_racial_mae,
+        escolaridade_mae,
+        SUM(casos_sc)::integer AS casos
+    FROM gold.sinan_sc_sem_prenatal_escolaridade
+    WHERE cod_municipio_residencia = '431490'
+      AND grupo_racial_mae IN ('Maes negras', 'Maes nao negras')
+    GROUP BY grupo_racial_mae, escolaridade_mae
+    """
+    data = pd.read_sql_query(text(query), engine)
+    group_order = ["Maes nao negras", "Maes negras"]
+    schooling_order = ["Ate 7 anos de estudo", "8 anos ou mais de estudo", "Ignorada/sem informacao"]
+    group_labels = {
+        "Maes nao negras": "Mães não negras",
+        "Maes negras": "Mães negras",
+    }
+    schooling_labels = {
+        "Ate 7 anos de estudo": "Até 7 anos de estudo",
+        "8 anos ou mais de estudo": "8 anos ou mais de estudo",
+        "Ignorada/sem informacao": "Ignorada/sem informação",
+    }
+    colors = {
+        "Ate 7 anos de estudo": "#D55E00",
+        "8 anos ou mais de estudo": "#0072B2",
+        "Ignorada/sem informacao": "#8A8F98",
+    }
+
+    base = pd.MultiIndex.from_product(
+        [group_order, schooling_order],
+        names=["grupo_racial_mae", "escolaridade_mae"],
+    ).to_frame(index=False)
+    plot_data = base.merge(data, on=["grupo_racial_mae", "escolaridade_mae"], how="left").fillna({"casos": 0})
+    plot_data["casos"] = plot_data["casos"].astype(int)
+    plot_data["total_grupo"] = plot_data.groupby("grupo_racial_mae")["casos"].transform("sum")
+    plot_data["percentual"] = plot_data.apply(
+        lambda row: 0 if row.total_grupo == 0 else row.casos / row.total_grupo * 100,
+        axis=1,
+    )
+
+    fig, ax = plt.subplots(figsize=(11.2, 5.2))
+    left = {group: 0.0 for group in group_order}
+    y_positions = list(range(len(group_order)))
+    for schooling in schooling_order:
+        subset = plot_data[plot_data["escolaridade_mae"].eq(schooling)]
+        widths = subset["percentual"].tolist()
+        starts = [left[group] for group in group_order]
+        bars = ax.barh(
+            y_positions,
+            widths,
+            left=starts,
+            color=colors[schooling],
+            edgecolor="white",
+            linewidth=0.9,
+            label=schooling_labels[schooling],
+            height=0.48,
+        )
+        for group, start, width, cases, bar in zip(group_order, starts, widths, subset["casos"], bars, strict=True):
+            if cases > 0 and width >= 8:
+                ax.text(
+                    start + width / 2,
+                    bar.get_y() + bar.get_height() / 2,
+                    f"{width:.1f}%\n(n={cases})",
+                    ha="center",
+                    va="center",
+                    color="white",
+                    fontsize=9,
+                    weight="bold",
+                )
+            left[group] += width
+
+    for group in group_order:
+        total = int(plot_data.loc[plot_data["grupo_racial_mae"].eq(group), "casos"].sum())
+        ax.text(101, y_positions[group_order.index(group)], f"Total: {total}", va="center", fontsize=9.5, color="#333333")
+
+    ax.set_title(
+        "Casos de sífilis congênita sem pré-natal: escolaridade por grupo racial (2015-2024)",
+        fontsize=13,
+        weight="bold",
+    )
+    ax.set_xlabel("Distribuição percentual dentro dos casos sem pré-natal")
+    ax.set_yticks(y_positions, [group_labels[group] for group in group_order])
+    ax.set_xlim(0, 112)
+    ax.grid(axis="x", alpha=0.25)
+    ax.legend(title="Escolaridade materna", loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=3)
+    fig.tight_layout(rect=[0, 0.08, 1, 1])
+
+    docs_output = savefig(fig, RESULTS_DIR / "escolaridade_sem_prenatal_grupo_racial.png")
+    target = output_dir / "escolaridade_sem_prenatal_grupo_racial.png"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(docs_output, target)
+    return target
+
+
 def plot_black_mothers_profile(engine, output_dir: Path) -> Path:
     data = pd.read_sql_query(text(read_sql_file("18_perfil_maes_negras_escolaridade_idade.sql")), engine)
     schooling_order = ["Ate 7 anos de estudo", "8 anos ou mais de estudo", "Ignorada/sem informacao"]
@@ -229,10 +324,12 @@ def plot_black_mothers_profile(engine, output_dir: Path) -> Path:
 
 
 def plot_intersectional(engine, output_dir: Path) -> Path:
-    data = pd.read_sql_query(text(read_sql_file("17_analise_interseccional_desigualdade.sql")), engine)
-    data = data[data["marcador_vulnerabilidade"].eq("Maior vulnerabilidade registrada")].copy()
+    data_all = pd.read_sql_query(text(read_sql_file("17_analise_interseccional_desigualdade.sql")), engine)
+    totals = data_all.groupby("grupo_racial_mae")["casos_sc"].sum().to_dict()
+    data = data_all[data_all["marcador_vulnerabilidade"].eq("Maior vulnerabilidade registrada")].copy()
     labels = {"Maes negras": "Mães negras", "Maes nao negras": "Mães não negras"}
     data["grupo"] = data["grupo_racial_mae"].map(labels)
+    data["total_grupo"] = data["grupo_racial_mae"].map(totals).astype(int)
 
     fig, ax = plt.subplots(figsize=(8.8, 4.8))
     bars = ax.barh(
@@ -244,7 +341,7 @@ def plot_intersectional(engine, output_dir: Path) -> Path:
         ax.text(
             bar.get_width() + 0.8,
             bar.get_y() + bar.get_height() / 2,
-            f"{row.percentual_no_grupo:.1f}% (n={row.casos_sc})",
+            f"{row.percentual_no_grupo:.1f}% (n={int(row.casos_sc)} de {int(row.total_grupo)})",
             va="center",
             fontsize=10,
         )
@@ -300,6 +397,7 @@ def generate_all(database_url_value: str | None = None, output_dir_value: str | 
         plot_ratio(engine, output_dir),
         plot_detailed_race(engine, output_dir),
         plot_prenatal(engine, output_dir),
+        plot_schooling_without_prenatal(engine, output_dir),
         copy_existing("diagnostico_materno_grupo_racial.png", "diagnostico_materno_grupo_racial.png", output_dir),
         copy_existing("tratamento_materno_grupo_racial.png", "tratamento_materno_grupo_racial.png", output_dir),
         plot_black_mothers_profile(engine, output_dir),

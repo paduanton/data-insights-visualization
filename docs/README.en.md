@@ -259,7 +259,7 @@ Each notebook should be run from the repository root or through Google Colab. Wh
 
 | Notebook | Main question | Google Colab | Result image |
 | --- | --- | --- | --- |
-| `notebooks/visualizacao_sifilis_congenita_poars.ipynb` | Among congenital syphilis cases without prenatal care in Porto Alegre, how is maternal education distributed by racial group? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/visualizacao_sifilis_congenita_poars.ipynb) | `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png` |
+| `notebooks/visualizacao_sifilis_congenita_poars.ipynb` | Among congenital syphilis cases without prenatal care in Porto Alegre, how is maternal education distributed by racial group? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/visualizacao_sifilis_congenita_poars.ipynb) | `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png`<br>`docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png` |
 | `notebooks/analytics/00_validacao_ambiente_dados.ipynb` | Can the environment reproduce the 2024 MVP before historical expansion? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/00_validacao_ambiente_dados.ipynb) | `docs/assets/results/validacao_ambiente_dados.png` |
 | `notebooks/analytics/01_overview_sifilis_congenita.ipynb` | What is the overview of reported cases, live births, and general incidence in Porto Alegre? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/01_overview_sifilis_congenita.ipynb) | `docs/assets/results/overview_sifilis_congenita.png` |
 | `notebooks/analytics/02_auditoria_basedosdados.ipynb` | Which Base dos Dados tables can complement or validate the project's DATASUS sources? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/02_auditoria_basedosdados.ipynb) | `docs/assets/results/auditoria_basedosdados_periodos.png` |
@@ -281,6 +281,7 @@ When creating a new notebook, add a new row to this table and apply the same upd
 Existing visualization:
 
 - `outputs/images/graphs/visualizacao_sifilis_congenita_poars_escolaridade_sem_prenatal.png`
+- `docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png`
 
 Initial validated results for 2024:
 
@@ -330,6 +331,7 @@ Generated images:
 - `docs/assets/results/serie_historica_incidencia.png`
 - `docs/assets/results/desigualdade_racial_incidencia.png`
 - `docs/assets/results/razao_incidencia_grupo_racial.png`
+- `docs/assets/results/escolaridade_sem_prenatal_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
 - `docs/assets/results/tratamento_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
@@ -344,6 +346,7 @@ Final report images:
 - `outputs/images/final_report/razao_incidencia_racial.png`
 - `outputs/images/final_report/incidencia_raca_cor_detalhada.png`
 - `outputs/images/final_report/prenatal_grupo_racial.png`
+- `outputs/images/final_report/escolaridade_sem_prenatal_grupo_racial.png`
 - `outputs/images/final_report/diagnostico_materno_grupo_racial.png`
 - `outputs/images/final_report/tratamento_materno_grupo_racial.png`
 - `outputs/images/final_report/perfil_maes_negras_escolaridade_idade.png`
@@ -354,6 +357,7 @@ Final-layer reading:
 
 - The incidence ratio between Black and non-Black mothers remains above `1` in every loaded year.
 - In `2024`, incidence among Black mothers was `1.54` times the incidence among non-Black mothers, with an absolute difference of `4.95` cases per 1,000 live births.
+- Among cases without prenatal care from `2015-2024`, Black mothers accounted for `259` records and non-Black mothers for `399`; low education, defined as up to 7 years of schooling, appeared in `23.9%` of Black mothers' cases (`n=62`) and `14.3%` of non-Black mothers' cases (`n=57`).
 - In `2024`, inadequate maternal treatment was recorded in `98.2%` of cases among Black mothers and `85.0%` among non-Black mothers in Porto Alegre.
 - The detailed race/color analysis confirms higher incidence among Black and Brown mothers than among White mothers in most of the series; Yellow, Indigenous, and ignored categories have low denominators and are treated as exploratory complements.
 - The intersectional analysis is descriptive: the higher-vulnerability marker combines low or ignored education with at least one absent, late, inadequate, or ignored care record.
