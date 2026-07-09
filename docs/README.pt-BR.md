@@ -180,6 +180,7 @@ Consultas iniciais:
 - `database/queries/09_inventario_campos_cuidado_materno.sql`: inspeção de campos candidatos para pré-natal, diagnóstico, tratamento, escolaridade, idade e raça/cor.
 - `database/queries/10_contexto_cnes_municipio.sql`: contexto anual de estabelecimentos CNES por município.
 - `database/queries/11_contexto_sim_municipio.sql`: óbitos gerais e causa básica `A50` no SIM por município de residência.
+- `database/queries/12_perfil_variaveis_criticas.sql`: distribuição de códigos brutos, categorias analíticas e percentuais das variáveis críticas.
 
 Cada nova consulta deve responder uma pergunta analítica explícita e, quando gerar resultado relevante, deve ser documentada neste arquivo e em `docs/README.en.md`.
 
@@ -256,6 +257,15 @@ Série validada para Porto Alegre:
 | 2024 | 137 | 12850 | 10,66 |
 
 Esses resultados confirmam que a base histórica está carregada e consultável, mas o schema analítico final ainda deve ser fechado após leitura dos perfis de colunas e qualidade.
+
+Perfil decisório das variáveis críticas:
+
+- SINAN/SIFCBR possui campos estáveis para raça/cor materna, pré-natal, escolaridade, diagnóstico materno e município de residência em `2015-2024`.
+- SINASC possui campos estáveis para raça/cor materna, consultas de pré-natal, escolaridade materna e município de residência em `2015-2024`.
+- CNES/ST possui campos estáveis para estabelecimento, município, tipo de unidade e atividade no snapshot anual de dezembro.
+- SIM/DO possui campos estáveis para município de residência, município de ocorrência, causa básica, data do óbito e raça/cor.
+- A escolaridade do SINAN/SIFCBR deve ser revisada com dicionário oficial antes de refinar categorias finais, porque códigos como `00`, `01` e `10` existem no período histórico e atualmente entram como `Ignorada/sem informacao`.
+- Categorias ignoradas, vazias ou sem informação permanecem preservadas e mensuradas nas consultas.
 
 Imagens de novos resultados devem ser adicionadas em:
 

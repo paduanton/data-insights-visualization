@@ -180,6 +180,7 @@ Initial queries:
 - `database/queries/09_inventario_campos_cuidado_materno.sql`: inspection of candidate fields for prenatal care, diagnosis, treatment, education, age, and race/color.
 - `database/queries/10_contexto_cnes_municipio.sql`: annual CNES facility context by municipality.
 - `database/queries/11_contexto_sim_municipio.sql`: general deaths and `A50` underlying cause in SIM by municipality of residence.
+- `database/queries/12_perfil_variaveis_criticas.sql`: distribution of raw codes, analytical categories, and percentages for critical variables.
 
 Each new query must answer an explicit analytical question and, when it produces a relevant result, it must be documented in this file and in `docs/README.pt-BR.md`.
 
@@ -256,6 +257,15 @@ Validated series for Porto Alegre:
 | 2024 | 137 | 12850 | 10.66 |
 
 These results confirm that the historical database is loaded and queryable, but the final analytical schema should still be closed only after reviewing column and quality profiles.
+
+Decision profile for critical variables:
+
+- SINAN/SIFCBR has stable fields for maternal race/color, prenatal care, education, maternal diagnosis timing, and municipality of residence across `2015-2024`.
+- SINASC has stable fields for maternal race/color, prenatal consultations, maternal education, and municipality of residence across `2015-2024`.
+- CNES/ST has stable fields for facility, municipality, unit type, and activity in the December annual snapshot.
+- SIM/DO has stable fields for municipality of residence, municipality of occurrence, underlying cause, date of death, and race/color.
+- SINAN/SIFCBR education should be reviewed with the official data dictionary before refining final categories, because codes such as `00`, `01`, and `10` exist in the historical period and currently map to `Ignorada/sem informacao`.
+- Ignored, empty, or missing categories remain preserved and measured in the queries.
 
 Images for new results should be added under:
 
