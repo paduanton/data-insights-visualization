@@ -55,18 +55,8 @@ def log(message: str = "") -> None:
     print(message, flush=True)
 
 
-def read_population_from_bigquery(
-    project_id: str,
-    table: str,
-    years: list[int],
-    uf_prefix: str,
-    max_bytes_billed: int,
-    query_timeout_seconds: int,
-) -> pd.DataFrame:
-    from google.cloud import bigquery
-
-    client = bigquery.Client(project=project_id)
-    sql = f"""
+def population_sql(table: str) -> str:
+    return f"""
 SELECT
   ano,
   SUBSTR(id_municipio, 1, 6) AS cod_municipio,
@@ -78,28 +68,22 @@ WHERE ano BETWEEN @start_year AND @end_year
 GROUP BY ano, cod_municipio, id_municipio
 ORDER BY ano, cod_municipio
 """.strip()
-    job_config = bigquery.QueryJobConfig(
-        maximum_bytes_billed=max_bytes_billed,
-        query_parameters=[
-            bigquery.ScalarQueryParameter("start_year", "INT64", min(years)),
-            bigquery.ScalarQueryParameter("end_year", "INT64", max(years)),
-            bigquery.ScalarQueryParameter("uf_prefix", "STRING", uf_prefix),
-        ],
-    )
-    rows = client.query(sql, job_config=job_config, timeout=query_timeout_seconds).result(
-        timeout=query_timeout_seconds
-    )
-    data = pd.DataFrame([dict(row.items()) for row in rows])
+
+
+def normalize_population_dataframe(data: pd.DataFrame, table: str, years: list[int]) -> pd.DataFrame:
     if data.empty:
         return data
 
-    data = data[data["ano"].isin(years)].copy()
-    data["source"] = "Base dos Dados"
-    data["source_table"] = table
-    data["source_year"] = data["ano"].astype(int)
+    normalized = data[data["ano"].isin(years)].copy()
+    if normalized.empty:
+        return normalized
+
+    normalized["source"] = "Base dos Dados"
+    normalized["source_table"] = table
+    normalized["source_year"] = normalized["ano"].astype(int)
     for column in ["ano", "cod_municipio", "id_municipio", "populacao_residente", "source", "source_table"]:
-        data[column] = data[column].astype(str)
-    return data[
+        normalized[column] = normalized[column].astype(str)
+    return normalized[
         [
             "source_year",
             "ano",
@@ -110,6 +94,32 @@ ORDER BY ano, cod_municipio
             "source_table",
         ]
     ]
+
+
+def read_population_from_bigquery(
+    project_id: str,
+    table: str,
+    years: list[int],
+    uf_prefix: str,
+    max_bytes_billed: int,
+    query_timeout_seconds: int,
+) -> pd.DataFrame:
+    from google.cloud import bigquery
+
+    client = bigquery.Client(project=project_id)
+    job_config = bigquery.QueryJobConfig(
+        maximum_bytes_billed=max_bytes_billed,
+        query_parameters=[
+            bigquery.ScalarQueryParameter("start_year", "INT64", min(years)),
+            bigquery.ScalarQueryParameter("end_year", "INT64", max(years)),
+            bigquery.ScalarQueryParameter("uf_prefix", "STRING", uf_prefix),
+        ],
+    )
+    rows = client.query(population_sql(table), job_config=job_config, timeout=query_timeout_seconds).result(
+        timeout=query_timeout_seconds
+    )
+    data = pd.DataFrame([dict(row.items()) for row in rows])
+    return normalize_population_dataframe(data, table, years)
 
 
 def main() -> None:
