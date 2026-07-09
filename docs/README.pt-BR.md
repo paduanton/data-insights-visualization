@@ -165,6 +165,8 @@ Com `GOOGLE_CLOUD_PROJECT` e credenciais configuradas, o comando estima bytes vi
 python -m src.etl.audit_basedosdados --execute
 ```
 
+As tabelas auditadas podem ser ajustadas no ambiente com as variaveis `BASEDOSDADOS_SINASC_TABLE`, `BASEDOSDADOS_SIM_TABLE`, `BASEDOSDADOS_CNES_TABLE`, `BASEDOSDADOS_POPULACAO_TABLE`, `BASEDOSDADOS_SIH_SERVICOS_TABLE` e `BASEDOSDADOS_SINAN_REFERENCIA_TABLE`.
+
 Para fontes complementares já validadas por profiling, há cargas bronze separadas:
 
 ```bash
@@ -324,6 +326,7 @@ Auditoria da Base dos Dados:
 
 - O pacote `basedosdados` está instalado localmente e importável.
 - O cliente `google-cloud-bigquery` também está disponível.
+- Os IDs BigQuery candidatos estão parametrizados em `.env.example`.
 - A auditoria completa ainda depende de `GOOGLE_CLOUD_PROJECT` e credenciais BigQuery configuradas.
 - A estratégia preferida para produção é BigQuery direto, com `dry_run`, limite de bytes e filtros por município/UF/ano antes de executar consultas maiores.
 

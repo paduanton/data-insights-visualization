@@ -165,6 +165,8 @@ With `GOOGLE_CLOUD_PROJECT` and credentials configured, the command estimates by
 python -m src.etl.audit_basedosdados --execute
 ```
 
+Audited tables can be adjusted through the environment variables `BASEDOSDADOS_SINASC_TABLE`, `BASEDOSDADOS_SIM_TABLE`, `BASEDOSDADOS_CNES_TABLE`, `BASEDOSDADOS_POPULACAO_TABLE`, `BASEDOSDADOS_SIH_SERVICOS_TABLE`, and `BASEDOSDADOS_SINAN_REFERENCIA_TABLE`.
+
 For complementary sources validated through profiling, separate bronze loaders are available:
 
 ```bash
@@ -324,6 +326,7 @@ Base dos Dados audit:
 
 - The `basedosdados` package is installed locally and importable.
 - The `google-cloud-bigquery` client is also available.
+- Candidate BigQuery IDs are parameterized in `.env.example`.
 - The full audit still depends on configured `GOOGLE_CLOUD_PROJECT` and BigQuery credentials.
 - The preferred production strategy is direct BigQuery, with `dry_run`, byte limits, and municipality/UF/year filters before running larger queries.
 

@@ -1,4 +1,11 @@
-from src.etl.audit_basedosdados import BasedosdadosTable, columns_sql, first_existing, period_sql, year_series_sql
+from src.etl.audit_basedosdados import (
+    BasedosdadosTable,
+    columns_sql,
+    first_existing,
+    period_sql,
+    tables_from_env,
+    year_series_sql,
+)
 
 
 def test_first_existing_returns_first_matching_candidate():
@@ -35,3 +42,12 @@ def test_year_series_sql_groups_by_year_and_filters_rs():
     assert "GROUP BY ano" in sql
     assert "ORDER BY ano" in sql
     assert "sigla_uf = 'RS'" in sql
+
+
+def test_tables_from_env_uses_configured_table_id(monkeypatch):
+    monkeypatch.setenv("BASEDOSDADOS_SINASC_TABLE", "basedosdados.br_ms_sinasc.microdados_teste")
+
+    tables = tables_from_env()
+
+    assert tables[0].table == "basedosdados.br_ms_sinasc.microdados_teste"
+    assert any(table.table == "basedosdados.br_ms_sim.microdados" for table in tables)

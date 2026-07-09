@@ -52,38 +52,53 @@ class AuditRow:
     status: str
 
 
-TABLES = [
-    BasedosdadosTable(
+DEFAULT_TABLE_CONFIG = [
+    (
+        "BASEDOSDADOS_SINASC_TABLE",
         "basedosdados.br_ms_sinasc.microdados",
         "Nascidos vivos, denominador de incidencia e perfil materno",
         "validar",
     ),
-    BasedosdadosTable(
+    (
+        "BASEDOSDADOS_SIM_TABLE",
         "basedosdados.br_ms_sim.microdados",
         "Mortalidade e desfechos agregados",
         "validar",
     ),
-    BasedosdadosTable(
+    (
+        "BASEDOSDADOS_CNES_TABLE",
         "basedosdados.br_ms_cnes.estabelecimento",
         "Oferta assistencial por municipio/ano",
         "validar",
     ),
-    BasedosdadosTable(
+    (
+        "BASEDOSDADOS_POPULACAO_TABLE",
         "basedosdados.br_ms_populacao.municipio",
         "Populacao municipal e contexto demografico",
         "validar",
     ),
-    BasedosdadosTable(
+    (
+        "BASEDOSDADOS_SIH_SERVICOS_TABLE",
         "basedosdados.br_ms_sih.servicos_profissionais",
         "Contexto hospitalar/assistencial complementar",
         "opcional",
     ),
-    BasedosdadosTable(
+    (
+        "BASEDOSDADOS_SINAN_REFERENCIA_TABLE",
         "basedosdados.br_ms_sinan.microdados_violencia",
         "Referencia tecnica para padrao de consumo SINAN, nao para sifilis congenita",
         "referencia",
     ),
 ]
+
+
+def tables_from_env() -> list[BasedosdadosTable]:
+    tables: list[BasedosdadosTable] = []
+    for env_var, default_table, planned_use, initial_decision in DEFAULT_TABLE_CONFIG:
+        table_id = os.getenv(env_var, default_table).strip()
+        if table_id:
+            tables.append(BasedosdadosTable(table_id, planned_use, initial_decision))
+    return tables
 
 
 def first_existing(columns: set[str], candidates: list[str]) -> str | None:
@@ -175,11 +190,16 @@ def make_client(project_id: str | None):
     return bigquery.Client(project=project_id)
 
 
-def audit_tables(project_id: str | None, execute: bool, max_bytes_billed: int) -> pd.DataFrame:
+def audit_tables(
+    project_id: str | None,
+    execute: bool,
+    max_bytes_billed: int,
+    tables: list[BasedosdadosTable] | None = None,
+) -> pd.DataFrame:
     client = make_client(project_id)
     rows: list[AuditRow] = []
 
-    for table in TABLES:
+    for table in tables or tables_from_env():
         row = AuditRow(
             source="Base dos Dados",
             table=table.table,
