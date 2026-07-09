@@ -24,6 +24,10 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def log(message: str = "") -> None:
+    print(message, flush=True)
+
+
 def main() -> None:
     args = parse_args()
     years = parse_years(args.year, args.years)
@@ -42,11 +46,11 @@ def main() -> None:
     execute_sql_file(engine, ROOT / "database/init/001_schemas.sql")
 
     for source in sources:
-        print(f"\nAno de referencia: {source.year}")
-        print(f"Lendo CNES/ST: {source.path}")
+        log(f"\nAno de referencia: {source.year}")
+        log(f"Lendo CNES/ST: {source.path}")
         cnes = prepare_dataframe(read_dbc(source.path), source.path, source.source, source.year)
         cnes = cnes.assign(source_month=f"{args.month:02d}")
-        print(f"Carregando bronze.cnes_estabelecimentos: {len(cnes)} linhas")
+        log(f"Carregando bronze.cnes_estabelecimentos: {len(cnes)} linhas")
         load_table(engine, cnes, "bronze", "cnes_estabelecimentos", source.year)
 
     execute_sql_file(engine, ROOT / "database/init/030_cnes_views.sql")

@@ -48,6 +48,10 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def log(message: str = "") -> None:
+    print(message, flush=True)
+
+
 def main() -> None:
     args = parse_args()
     years = parse_years(args.year, args.years)
@@ -82,15 +86,15 @@ def main() -> None:
     execute_sql_file(engine, ROOT / "database/init/001_schemas.sql")
 
     for source_pair in source_pairs:
-        print(f"\nAno de referencia: {source_pair.year}")
-        print(f"Lendo SINAN/SIFCBR: {source_pair.sinan}")
+        log(f"\nAno de referencia: {source_pair.year}")
+        log(f"Lendo SINAN/SIFCBR: {source_pair.sinan}")
         sinan = prepare_dataframe(read_dbc(source_pair.sinan), source_pair.sinan, "SINAN/SIFCBR", source_pair.year)
-        print(f"Carregando bronze.sinan_sifilis_congenita: {len(sinan)} linhas")
+        log(f"Carregando bronze.sinan_sifilis_congenita: {len(sinan)} linhas")
         load_table(engine, sinan, "bronze", "sinan_sifilis_congenita", source_pair.year)
 
-        print(f"Lendo SINASC: {source_pair.sinasc}")
+        log(f"Lendo SINASC: {source_pair.sinasc}")
         sinasc = prepare_dataframe(read_dbc(source_pair.sinasc), source_pair.sinasc, "SINASC", source_pair.year)
-        print(f"Carregando bronze.sinasc_nascidos_vivos: {len(sinasc)} linhas")
+        log(f"Carregando bronze.sinasc_nascidos_vivos: {len(sinasc)} linhas")
         load_table(engine, sinasc, "bronze", "sinasc_nascidos_vivos", source_pair.year)
 
     execute_sql_file(engine, ROOT / "database/init/010_silver_views.sql")
