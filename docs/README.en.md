@@ -308,11 +308,11 @@ Generated images:
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
 - `docs/assets/results/sintese_desigualdade_racial.png`
+- `docs/assets/results/perfil_colunas_qualidade.png`
 
 Images pending generation:
 
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
-- `docs/assets/results/perfil_colunas_qualidade.png`
 
 Final-layer reading:
 
