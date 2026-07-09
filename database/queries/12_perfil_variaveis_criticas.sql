@@ -57,6 +57,17 @@ WITH distribuicoes AS (
     UNION ALL
 
     SELECT
+        'SINAN/SIFCBR',
+        'tratamento_materno_adequado',
+        COALESCE(NULLIF(TRIM(ant_tratad), ''), '<vazio>'),
+        tratamento_materno_adequado,
+        COUNT(*)
+    FROM silver.sinan_sifilis_congenita
+    GROUP BY COALESCE(NULLIF(TRIM(ant_tratad), ''), '<vazio>'), tratamento_materno_adequado
+
+    UNION ALL
+
+    SELECT
         'SINASC',
         'raca_cor_mae',
         COALESCE(NULLIF(TRIM(racacormae), ''), '<vazio>'),

@@ -8,6 +8,7 @@ DROP VIEW IF EXISTS gold.qualidade_registros;
 DROP VIEW IF EXISTS gold.sintese_desigualdade_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.razao_incidencia_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.incidencia_grupo_racial_municipio_ano;
+DROP VIEW IF EXISTS gold.tratamento_materno_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.diagnostico_materno_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.prenatal_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.sinasc_nv_ano_raca;
@@ -71,7 +72,13 @@ SELECT
         WHEN '4' THEN 'Nao realizado'
         WHEN '9' THEN 'Ignorado/sem informacao'
         ELSE 'Ignorado/sem informacao'
-    END AS momento_diagnostico_materno
+    END AS momento_diagnostico_materno,
+    CASE TRIM(ant_tratad)
+        WHEN '1' THEN 'Adequado'
+        WHEN '2' THEN 'Inadequado'
+        WHEN '9' THEN 'Ignorado/sem informacao'
+        ELSE 'Ignorado/sem informacao'
+    END AS tratamento_materno_adequado
 FROM bronze.sinan_sifilis_congenita;
 
 CREATE VIEW silver.sinasc_nascidos_vivos AS

@@ -4,6 +4,7 @@ DROP VIEW IF EXISTS gold.contexto_integrado_municipio_ano;
 DROP VIEW IF EXISTS gold.razao_incidencia_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.sintese_desigualdade_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.incidencia_grupo_racial_municipio_ano;
+DROP VIEW IF EXISTS gold.tratamento_materno_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.diagnostico_materno_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.prenatal_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.qualidade_registros;
@@ -177,6 +178,20 @@ SELECT
 FROM silver.sinan_sifilis_congenita
 GROUP BY ano, cod_municipio_residencia, grupo_racial_mae, momento_diagnostico_materno;
 
+CREATE VIEW gold.tratamento_materno_grupo_racial_municipio_ano AS
+SELECT
+    ano,
+    cod_municipio_residencia,
+    grupo_racial_mae,
+    tratamento_materno_adequado,
+    COUNT(*) AS casos_sc,
+    ROUND(
+        COUNT(*)::numeric / NULLIF(SUM(COUNT(*)) OVER (PARTITION BY ano, cod_municipio_residencia, grupo_racial_mae), 0) * 100,
+        1
+    ) AS percentual_no_grupo
+FROM silver.sinan_sifilis_congenita
+GROUP BY ano, cod_municipio_residencia, grupo_racial_mae, tratamento_materno_adequado;
+
 CREATE VIEW gold.qualidade_registros AS
 SELECT
     'SINAN/SIFCBR' AS base,
@@ -208,6 +223,17 @@ SELECT
     COUNT(*) FILTER (WHERE escolaridade_mae = 'Ignorada/sem informacao'),
     COUNT(*),
     ROUND(COUNT(*) FILTER (WHERE escolaridade_mae = 'Ignorada/sem informacao')::numeric / NULLIF(COUNT(*), 0) * 100, 2)
+FROM silver.sinan_sifilis_congenita
+GROUP BY ano, cod_municipio_residencia
+UNION ALL
+SELECT
+    'SINAN/SIFCBR',
+    ano,
+    cod_municipio_residencia,
+    'tratamento_materno_adequado',
+    COUNT(*) FILTER (WHERE tratamento_materno_adequado = 'Ignorado/sem informacao'),
+    COUNT(*),
+    ROUND(COUNT(*) FILTER (WHERE tratamento_materno_adequado = 'Ignorado/sem informacao')::numeric / NULLIF(COUNT(*), 0) * 100, 2)
 FROM silver.sinan_sifilis_congenita
 GROUP BY ano, cod_municipio_residencia
 UNION ALL
