@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.config import ROOT, resolve_project_path
+from src.config import ROOT, load_project_env, resolve_project_path
 
 
 CANDIDATE_YEAR_COLUMNS = ["ano", "ano_obito", "ano_nascimento", "ano_competencia", "ano_referencia"]
@@ -237,6 +237,7 @@ def audit_tables(
 
 
 def parse_args() -> argparse.Namespace:
+    load_project_env()
     parser = argparse.ArgumentParser(description="Audita tabelas candidatas da Base dos Dados via BigQuery.")
     parser.add_argument(
         "--project-id",

@@ -166,6 +166,7 @@ python -m src.etl.audit_basedosdados --execute
 ```
 
 Audited tables can be adjusted through the environment variables `BASEDOSDADOS_SINASC_TABLE`, `BASEDOSDADOS_SIM_TABLE`, `BASEDOSDADOS_CNES_TABLE`, `BASEDOSDADOS_POPULACAO_TABLE`, `BASEDOSDADOS_SIH_SERVICOS_TABLE`, and `BASEDOSDADOS_SINAN_REFERENCIA_TABLE`.
+ETL and audit scripts automatically load `.env` when the file exists, while preserving variables already defined in the terminal.
 
 For complementary sources validated through profiling, separate bronze loaders are available:
 

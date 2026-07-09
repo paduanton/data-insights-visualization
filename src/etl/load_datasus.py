@@ -3,11 +3,12 @@ from __future__ import annotations
 import argparse
 import os
 
-from src.config import DEFAULT_DATABASE_URL, ROOT
+from src.config import DEFAULT_DATABASE_URL, ROOT, load_project_env
 from src.etl.datasus_sources import parse_years, resolve_datasus_sources
 
 
 def parse_args() -> argparse.Namespace:
+    load_project_env()
     parser = argparse.ArgumentParser(
         description="Carrega microdados DATASUS DBC no PostgreSQL analitico do projeto."
     )
