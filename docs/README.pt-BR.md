@@ -304,7 +304,7 @@ Perfil decisório das variáveis críticas:
 - SINASC possui campos estáveis para raça/cor materna, consultas de pré-natal, escolaridade materna e município de residência em `2015-2024`.
 - CNES/ST possui campos estáveis para estabelecimento, município, tipo de unidade e atividade no snapshot anual de dezembro.
 - SIM/DO possui campos estáveis para município de residência, município de ocorrência, causa básica, data do óbito e raça/cor.
-- A escolaridade do SINAN/SIFCBR preserva a categoria detalhada em `escolaridade_mae_detalhada` e usa o agrupamento analítico `00-03` como até 7 anos de estudo, `04-08` como 8 anos ou mais de estudo e `09`, `10` ou vazio como ignorada/sem informação.
+- A escolaridade do SINAN/SIFCBR preserva a categoria detalhada em `escolaridade_mae_detalhada` e usa o agrupamento analítico `00-03` como até 7 anos de estudo, `04-08` como 8 anos ou mais de estudo e `09`, `10` ou vazio como ignorada/sem informação. A regra está documentada em `docs/references/dicionario_escolaridade_sinan.md`.
 - Categorias ignoradas, vazias ou sem informação permanecem preservadas e mensuradas nas consultas.
 
 Imagens geradas:
@@ -324,6 +324,7 @@ Leitura da camada final:
 - A razão de incidência entre mães negras e mães não negras permanece acima de `1` em todos os anos carregados.
 - Em `2024`, a incidência entre mães negras foi `1,54` vez a incidência entre mães não negras, com diferença absoluta de `4,95` casos por 1.000 nascidos vivos.
 - A queda geral da incidência após `2022` não elimina a desigualdade relativa entre os grupos.
+- As análises de pré-natal, escolaridade e diagnóstico materno devem ser lidas como estratos descritivos dos casos notificados, não como pareamento individual nem inferência causal.
 
 Auditoria da Base dos Dados:
 
@@ -333,6 +334,7 @@ Auditoria da Base dos Dados:
 - A auditoria completa foi executada via BigQuery com `dry_run`, limite de bytes e filtros por ano/UF quando disponíveis.
 - Períodos auditados: SINASC `1994-2024`, SIM `1996-2024`, CNES `2005-2025`, população municipal `2000-2025`, SIH `2008-2025` e SINAN violência `2009-2019`.
 - A população municipal da Base dos Dados foi incorporada como contexto agregado em `gold.contexto_integrado_municipio_ano`; o denominador principal da incidência permanece sendo nascidos vivos do SINASC.
+- A camada Base dos Dados ajuda a validar cobertura e enriquecer contexto populacional; ela não substitui os microdados DATASUS usados no cálculo principal da incidência.
 
 ## Limitações
 

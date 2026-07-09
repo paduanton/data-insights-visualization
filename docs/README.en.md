@@ -304,7 +304,7 @@ Decision profile for critical variables:
 - SINASC has stable fields for maternal race/color, prenatal consultations, maternal education, and municipality of residence across `2015-2024`.
 - CNES/ST has stable fields for facility, municipality, unit type, and activity in the December annual snapshot.
 - SIM/DO has stable fields for municipality of residence, municipality of occurrence, underlying cause, date of death, and race/color.
-- SINAN/SIFCBR education preserves the detailed category in `escolaridade_mae_detalhada` and uses the analytical grouping `00-03` as up to 7 years of schooling, `04-08` as 8 or more years of schooling, and `09`, `10`, or empty values as ignored/missing information.
+- SINAN/SIFCBR education preserves the detailed category in `escolaridade_mae_detalhada` and uses the analytical grouping `00-03` as up to 7 years of schooling, `04-08` as 8 or more years of schooling, and `09`, `10`, or empty values as ignored/missing information. The rule is documented in `docs/references/dicionario_escolaridade_sinan.md`.
 - Ignored, empty, or missing categories remain preserved and measured in the queries.
 
 Generated images:
@@ -324,6 +324,7 @@ Final-layer reading:
 - The incidence ratio between Black and non-Black mothers remains above `1` in every loaded year.
 - In `2024`, incidence among Black mothers was `1.54` times the incidence among non-Black mothers, with an absolute difference of `4.95` cases per 1,000 live births.
 - The overall incidence drop after `2022` does not remove the relative inequality between groups.
+- Prenatal care, education, and maternal diagnosis analyses should be read as descriptive strata of reported cases, not as individual-level linkage or causal inference.
 
 Base dos Dados audit:
 
@@ -333,6 +334,7 @@ Base dos Dados audit:
 - The full audit was executed through BigQuery with `dry_run`, byte limits, and year/UF filters when available.
 - Audited periods: SINASC `1994-2024`, SIM `1996-2024`, CNES `2005-2025`, municipal population `2000-2025`, SIH `2008-2025`, and SINAN violence `2009-2019`.
 - Base dos Dados municipal population was incorporated as aggregated context in `gold.contexto_integrado_municipio_ano`; the main incidence denominator remains SINASC live births.
+- The Base dos Dados layer helps validate coverage and enrich population context; it does not replace DATASUS microdata used in the main incidence calculation.
 
 ## Limitations
 
