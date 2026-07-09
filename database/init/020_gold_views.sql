@@ -1,6 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS gold;
 
 DROP VIEW IF EXISTS gold.razao_incidencia_grupo_racial_municipio_ano;
+DROP VIEW IF EXISTS gold.sintese_desigualdade_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.incidencia_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.diagnostico_materno_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.prenatal_grupo_racial_municipio_ano;
@@ -132,6 +133,21 @@ JOIN gold.incidencia_grupo_racial_municipio_ano AS nao_negras
  AND nao_negras.cod_municipio_residencia = negras.cod_municipio_residencia
 WHERE negras.grupo_racial_mae = 'Maes negras'
   AND nao_negras.grupo_racial_mae = 'Maes nao negras';
+
+CREATE VIEW gold.sintese_desigualdade_racial_municipio_ano AS
+SELECT
+    ano,
+    cod_municipio_residencia,
+    casos_maes_negras,
+    nascidos_vivos_maes_negras,
+    incidencia_maes_negras,
+    casos_maes_nao_negras,
+    nascidos_vivos_maes_nao_negras,
+    incidencia_maes_nao_negras,
+    razao_incidencia_negras_sobre_nao_negras,
+    ROUND(incidencia_maes_negras - incidencia_maes_nao_negras, 2) AS diferenca_absoluta_incidencia,
+    ROUND((razao_incidencia_negras_sobre_nao_negras - 1) * 100, 1) AS excesso_relativo_percentual
+FROM gold.razao_incidencia_grupo_racial_municipio_ano;
 
 CREATE VIEW gold.prenatal_grupo_racial_municipio_ano AS
 SELECT

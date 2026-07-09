@@ -34,6 +34,7 @@ Fonte auxiliar para inventário e validação:
 Uso previsto da Base dos Dados:
 
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb` audita disponibilidade, colunas, período e custo estimado via BigQuery.
+- `python -m src.etl.audit_basedosdados` gera uma matriz CSV de auditoria em `data/profiles/basedosdados_audit.csv`.
 - A implementação principal continua usando microdados DATASUS locais em `.dbc`.
 - Base dos Dados pode ser usada para validação cruzada de totais, consulta exploratória rápida e enriquecimento contextual quando a cobertura e o custo forem adequados.
 - Não deve substituir automaticamente DATASUS/IBGE como fonte primária documentada do pipeline.
@@ -91,6 +92,7 @@ Views analíticas consolidadas:
 - `gold.indicadores_municipio_ano`: casos, nascidos vivos e incidência geral por município/ano.
 - `gold.incidencia_grupo_racial_municipio_ano`: incidência estimada por grupo racial materno.
 - `gold.razao_incidencia_grupo_racial_municipio_ano`: razão de incidência entre mães negras e mães não negras.
+- `gold.sintese_desigualdade_racial_municipio_ano`: camada final com razão, diferença absoluta e excesso relativo da incidência.
 - `gold.prenatal_grupo_racial_municipio_ano`: distribuição de pré-natal entre casos por grupo racial.
 - `gold.diagnostico_materno_grupo_racial_municipio_ano`: momento do diagnóstico materno por grupo racial.
 - `gold.qualidade_registros`: ignorados por variável crítica.
@@ -151,6 +153,18 @@ Para uma lista de download manual, use:
 python -m src.etl.inventory_datasus --years 2015:2024 --missing-only --format markdown --output data/profiles/datasus_missing_files_2015_2024.md
 ```
 
+Para auditar tabelas candidatas da Base dos Dados:
+
+```bash
+python -m src.etl.audit_basedosdados
+```
+
+Com `GOOGLE_CLOUD_PROJECT` e credenciais configuradas, o comando estima bytes via BigQuery `dry_run`. Para executar consultas de período, use:
+
+```bash
+python -m src.etl.audit_basedosdados --execute
+```
+
 Para fontes complementares já validadas por profiling, há cargas bronze separadas:
 
 ```bash
@@ -197,6 +211,7 @@ Consultas iniciais:
 - `database/queries/10_contexto_cnes_municipio.sql`: contexto anual de estabelecimentos CNES por município.
 - `database/queries/11_contexto_sim_municipio.sql`: óbitos gerais e causa básica `A50` no SIM por município de residência.
 - `database/queries/12_perfil_variaveis_criticas.sql`: distribuição de códigos brutos, categorias analíticas e percentuais das variáveis críticas.
+- `database/queries/13_sintese_desigualdade_racial.sql`: síntese anual da desigualdade racial na incidência de sífilis congênita.
 
 Cada nova consulta deve responder uma pergunta analítica explícita e, quando gerar resultado relevante, deve ser documentada neste arquivo e em `docs/README.en.md`.
 
@@ -215,6 +230,7 @@ Notebooks iniciais:
 - `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb`: incidência e razão de incidência por grupo racial.
 - `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: diagnóstico materno e base para análise de tratamento.
 - `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventário e uso contextual de CNES, IBGE e SIM.
+- `notebooks/analytics/09_sintese_desigualdade_racial.ipynb`: camada final de síntese dos indicadores de desigualdade racial.
 
 ## Referência Dos Notebooks
 
@@ -232,6 +248,7 @@ Cada notebook deve ser executado a partir da raiz do repositório ou pelo Google
 | `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb` | A incidência estimada difere entre mães negras e mães não negras? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/06_desigualdade_racial_incidencia.ipynb) | `docs/assets/results/desigualdade_racial_incidencia.png` |
 | `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | O momento do diagnóstico materno indica diferenças no cuidado registrado? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png` |
 | `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Quais fontes complementares podem contextualizar oferta assistencial, população e desfechos? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
+| `notebooks/analytics/09_sintese_desigualdade_racial.ipynb` | A série histórica confirma desigualdade persistente na incidência entre mães negras e mães não negras? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/09_sintese_desigualdade_racial.ipynb) | `docs/assets/results/sintese_desigualdade_racial.png` |
 
 Ao criar um novo notebook, adicione uma nova linha nesta tabela e mantenha a mesma atualização em `docs/README.en.md`. A imagem do resultado deve ser salva em `docs/assets/results/` quando fizer parte da documentação do projeto, ou em `outputs/images/` quando for uma saída operacional do notebook.
 
@@ -290,11 +307,25 @@ Imagens geradas:
 - `docs/assets/results/razao_incidencia_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
+- `docs/assets/results/sintese_desigualdade_racial.png`
 
 Imagens pendentes de geração:
 
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
 - `docs/assets/results/perfil_colunas_qualidade.png`
+
+Leitura da camada final:
+
+- A razão de incidência entre mães negras e mães não negras permanece acima de `1` em todos os anos carregados.
+- Em `2024`, a incidência entre mães negras foi `1,54` vez a incidência entre mães não negras, com diferença absoluta de `4,95` casos por 1.000 nascidos vivos.
+- A queda geral da incidência após `2022` não elimina a desigualdade relativa entre os grupos.
+
+Auditoria da Base dos Dados:
+
+- O pacote `basedosdados` está instalado localmente e importável.
+- O cliente `google-cloud-bigquery` também está disponível.
+- A auditoria completa ainda depende de `GOOGLE_CLOUD_PROJECT` e credenciais BigQuery configuradas.
+- A estratégia preferida para produção é BigQuery direto, com `dry_run`, limite de bytes e filtros por município/UF/ano antes de executar consultas maiores.
 
 ## Limitações
 
