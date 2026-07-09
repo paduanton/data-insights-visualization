@@ -199,11 +199,18 @@ ORDER BY ano
     fig.suptitle("Porto Alegre: casos e incidencia de sifilis congenita", fontsize=14, weight="bold")
     bars, labels1 = ax1.get_legend_handles_labels()
     lines, labels2 = ax2.get_legend_handles_labels()
-    ax1.legend(bars + lines, labels1 + labels2, loc="upper right", frameon=True)
-    fig.tight_layout()
+    ax1.legend(
+        bars + lines,
+        labels1 + labels2,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.14),
+        ncol=2,
+        frameon=True,
+    )
+    fig.tight_layout(rect=[0, 0.08, 1, 1])
 
     output = output_dir / "overview_sifilis_congenita.png"
-    fig.savefig(output, dpi=160)
+    fig.savefig(output, dpi=160, bbox_inches="tight")
     plt.close(fig)
     return output
 
@@ -420,14 +427,22 @@ ORDER BY ano, grupo_racial_mae, tratamento_materno_adequado
             color=colors[group],
         )
 
-    ax.set_title("Porto Alegre: tratamento materno inadequado por grupo racial", fontsize=14, weight="bold")
+    ax.set_title("Porto Alegre: tratamento materno registrado como inadequado por grupo racial", fontsize=14, weight="bold")
     ax.set_xlabel("Ano")
     ax.set_ylabel("Percentual dos casos notificados")
     ax.set_xlim(data["ano"].min() - 0.2, data["ano"].max() + 0.8)
     ax.set_ylim(0, max(100, inadequate["percentual"].max() + 5))
     ax.grid(axis="y", color="#E6E6E6")
     ax.legend(title="Grupo racial materno", loc="lower center", bbox_to_anchor=(0.5, -0.28), ncol=2, frameon=True)
-    fig.tight_layout()
+    fig.text(
+        0.5,
+        0.01,
+        "Inadequado = codigo 2 do campo ANT_TRATAD no SINAN/SIFCBR.",
+        ha="center",
+        fontsize=9,
+        color="#333333",
+    )
+    fig.tight_layout(rect=[0, 0.08, 1, 1])
 
     output = output_dir / "tratamento_materno_grupo_racial.png"
     fig.savefig(output, dpi=160, bbox_inches="tight")
