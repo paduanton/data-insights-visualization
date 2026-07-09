@@ -1,6 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS silver;
 CREATE SCHEMA IF NOT EXISTS gold;
 
+DROP VIEW IF EXISTS gold.contexto_integrado_municipio_ano;
 DROP VIEW IF EXISTS gold.cnes_estabelecimentos_municipio_ano;
 DROP VIEW IF EXISTS silver.cnes_estabelecimentos;
 

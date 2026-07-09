@@ -36,6 +36,17 @@ WITH distribuicoes AS (
 
     SELECT
         'SINAN/SIFCBR',
+        'escolaridade_mae_detalhada',
+        COALESCE(NULLIF(TRIM(escolmae), ''), '<vazio>'),
+        escolaridade_mae_detalhada,
+        COUNT(*)
+    FROM silver.sinan_sifilis_congenita
+    GROUP BY COALESCE(NULLIF(TRIM(escolmae), ''), '<vazio>'), escolaridade_mae_detalhada
+
+    UNION ALL
+
+    SELECT
+        'SINAN/SIFCBR',
         'momento_diagnostico_materno',
         COALESCE(NULLIF(TRIM(tra_diag_t), ''), '<vazio>'),
         momento_diagnostico_materno,

@@ -28,10 +28,14 @@ def test_classify_racial_group_uses_black_as_pretas_and_pardas():
 
 
 def test_classify_sinan_schooling_groups_years_of_study():
+    assert classify_sinan_schooling("00") == "Ate 7 anos de estudo"
+    assert classify_sinan_schooling("01") == "Ate 7 anos de estudo"
     assert classify_sinan_schooling("03") == "Ate 7 anos de estudo"
-    assert classify_sinan_schooling("05") == "Ate 7 anos de estudo"
+    assert classify_sinan_schooling("04") == "8 anos ou mais de estudo"
+    assert classify_sinan_schooling("05") == "8 anos ou mais de estudo"
     assert classify_sinan_schooling("06") == "8 anos ou mais de estudo"
     assert classify_sinan_schooling("09") == "Ignorada/sem informacao"
+    assert classify_sinan_schooling("10") == "Ignorada/sem informacao"
 
 
 def test_classify_sinan_prenatal_categories():

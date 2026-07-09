@@ -56,9 +56,9 @@ def classify_racial_group(value: object) -> str:
 
 def classify_sinan_schooling(value: object) -> str:
     code = str(value).strip()
-    if code in {"02", "03", "04", "05"}:
+    if code in {"00", "01", "02", "03"}:
         return "Ate 7 anos de estudo"
-    if code in {"06", "07", "08"}:
+    if code in {"04", "05", "06", "07", "08"}:
         return "8 anos ou mais de estudo"
     return "Ignorada/sem informacao"
 

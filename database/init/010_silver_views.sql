@@ -2,6 +2,8 @@ CREATE SCHEMA IF NOT EXISTS bronze;
 CREATE SCHEMA IF NOT EXISTS silver;
 CREATE SCHEMA IF NOT EXISTS gold;
 
+DROP VIEW IF EXISTS gold.contexto_integrado_municipio_ano;
+DROP VIEW IF EXISTS gold.populacao_municipio_ano;
 DROP VIEW IF EXISTS gold.qualidade_registros;
 DROP VIEW IF EXISTS gold.sintese_desigualdade_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.razao_incidencia_grupo_racial_municipio_ano;
@@ -42,9 +44,24 @@ SELECT
         ELSE 'Ignorado/sem informacao'
     END AS realizacao_prenatal,
     CASE
-        WHEN TRIM(escolmae) IN ('02', '03', '04', '05') THEN 'Ate 7 anos de estudo'
-        WHEN TRIM(escolmae) IN ('06', '07', '08') THEN '8 anos ou mais de estudo'
-        WHEN TRIM(escolmae) IN ('09', '') OR escolmae IS NULL THEN 'Ignorada/sem informacao'
+        WHEN TRIM(escolmae) = '00' THEN 'Analfabeta'
+        WHEN TRIM(escolmae) = '01' THEN '1a a 4a serie incompleta do EF'
+        WHEN TRIM(escolmae) = '02' THEN '4a serie completa do EF'
+        WHEN TRIM(escolmae) = '03' THEN '5a a 8a serie incompleta do EF'
+        WHEN TRIM(escolmae) = '04' THEN 'Ensino fundamental completo'
+        WHEN TRIM(escolmae) = '05' THEN 'Ensino medio incompleto'
+        WHEN TRIM(escolmae) = '06' THEN 'Ensino medio completo'
+        WHEN TRIM(escolmae) = '07' THEN 'Educacao superior incompleta'
+        WHEN TRIM(escolmae) = '08' THEN 'Educacao superior completa'
+        WHEN TRIM(escolmae) = '09' THEN 'Ignorada'
+        WHEN TRIM(escolmae) = '10' THEN 'Nao se aplica'
+        WHEN TRIM(escolmae) = '' OR escolmae IS NULL THEN 'Ignorada'
+        ELSE 'Ignorada'
+    END AS escolaridade_mae_detalhada,
+    CASE
+        WHEN TRIM(escolmae) IN ('00', '01', '02', '03') THEN 'Ate 7 anos de estudo'
+        WHEN TRIM(escolmae) IN ('04', '05', '06', '07', '08') THEN '8 anos ou mais de estudo'
+        WHEN TRIM(escolmae) IN ('09', '10', '') OR escolmae IS NULL THEN 'Ignorada/sem informacao'
         ELSE 'Ignorada/sem informacao'
     END AS escolaridade_mae,
     CASE TRIM(tra_diag_t)
