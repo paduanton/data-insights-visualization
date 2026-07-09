@@ -46,9 +46,20 @@ class AuditRow:
     planned_use: str
     decision: str
     available_period: str
+    total_records: int | None
     year_column: str | None
     municipality_column: str | None
     estimated_bytes: str
+    status: str
+
+
+@dataclass
+class YearSeriesRow:
+    source: str
+    table: str
+    year_column: str | None
+    year: int | None
+    total_records: int | None
     status: str
 
 
@@ -163,12 +174,16 @@ def format_bytes(value: int | None) -> str:
     return f"{gib:.3f} GiB"
 
 
-def query_dataframe(client, sql: str) -> pd.DataFrame:
-    rows = client.query(sql).result()
+def log(message: str = "") -> None:
+    print(message, flush=True)
+
+
+def query_dataframe(client, sql: str, timeout_seconds: int) -> pd.DataFrame:
+    rows = client.query(sql, timeout=timeout_seconds).result(timeout=timeout_seconds)
     return pd.DataFrame([dict(row.items()) for row in rows])
 
 
-def dry_run_bytes(client, sql: str, max_bytes_billed: int) -> int | None:
+def dry_run_bytes(client, sql: str, max_bytes_billed: int, timeout_seconds: int) -> int | None:
     from google.cloud import bigquery
 
     job_config = bigquery.QueryJobConfig(
@@ -176,7 +191,7 @@ def dry_run_bytes(client, sql: str, max_bytes_billed: int) -> int | None:
         use_query_cache=False,
         maximum_bytes_billed=max_bytes_billed,
     )
-    job = client.query(sql, job_config=job_config)
+    job = client.query(sql, job_config=job_config, timeout=timeout_seconds)
     return int(job.total_bytes_processed or 0)
 
 
@@ -195,17 +210,20 @@ def audit_tables(
     execute: bool,
     max_bytes_billed: int,
     tables: list[BasedosdadosTable] | None = None,
+    query_timeout_seconds: int = 60,
 ) -> pd.DataFrame:
     client = make_client(project_id)
     rows: list[AuditRow] = []
 
     for table in tables or tables_from_env():
+        log(f"Auditando Base dos Dados: {table.table}")
         row = AuditRow(
             source="Base dos Dados",
             table=table.table,
             planned_use=table.planned_use,
             decision=table.initial_decision,
             available_period="a descobrir",
+            total_records=None,
             year_column=None,
             municipality_column=None,
             estimated_bytes="nao estimado",
@@ -214,24 +232,96 @@ def audit_tables(
 
         if client is not None:
             try:
-                columns = set(query_dataframe(client, columns_sql(table))["column_name"].astype(str))
+                columns = set(query_dataframe(client, columns_sql(table), query_timeout_seconds)["column_name"].astype(str))
                 sql, year_column, municipality_column = period_sql(table, columns)
                 row.year_column = year_column
                 row.municipality_column = municipality_column
-                row.estimated_bytes = format_bytes(dry_run_bytes(client, sql, max_bytes_billed))
+                row.estimated_bytes = format_bytes(dry_run_bytes(client, sql, max_bytes_billed, query_timeout_seconds))
                 row.status = "dry_run ok"
 
                 if execute:
-                    result = query_dataframe(client, sql)
+                    result = query_dataframe(client, sql, query_timeout_seconds)
                     if not result.empty and {"ano_minimo", "ano_maximo"}.issubset(result.columns):
                         row.available_period = f"{result.loc[0, 'ano_minimo']}-{result.loc[0, 'ano_maximo']}"
+                        row.total_records = int(result.loc[0, "total_registros"])
                     else:
                         row.available_period = "sem coluna anual identificada"
+                        if not result.empty and "total_registros" in result.columns:
+                            row.total_records = int(result.loc[0, "total_registros"])
                     row.status = "consulta executada"
             except Exception as exc:
                 row.status = f"erro: {type(exc).__name__}: {exc}"
 
         rows.append(row)
+
+    return pd.DataFrame([asdict(row) for row in rows])
+
+
+def audit_year_series(
+    project_id: str | None,
+    max_bytes_billed: int,
+    tables: list[BasedosdadosTable] | None = None,
+    query_timeout_seconds: int = 60,
+) -> pd.DataFrame:
+    client = make_client(project_id)
+    rows: list[YearSeriesRow] = []
+
+    for table in tables or tables_from_env():
+        log(f"Gerando serie anual Base dos Dados: {table.table}")
+        if client is None:
+            rows.append(
+                YearSeriesRow(
+                    source="Base dos Dados",
+                    table=table.table,
+                    year_column=None,
+                    year=None,
+                    total_records=None,
+                    status="pendente: configure GOOGLE_CLOUD_PROJECT e credenciais BigQuery",
+                )
+            )
+            continue
+
+        try:
+            columns = set(query_dataframe(client, columns_sql(table), query_timeout_seconds)["column_name"].astype(str))
+            year_column = first_existing(columns, CANDIDATE_YEAR_COLUMNS)
+            if year_column is None:
+                rows.append(
+                    YearSeriesRow(
+                        source="Base dos Dados",
+                        table=table.table,
+                        year_column=None,
+                        year=None,
+                        total_records=None,
+                        status="sem coluna anual identificada",
+                    )
+                )
+                continue
+
+            sql = year_series_sql(table, year_column, columns)
+            dry_run_bytes(client, sql, max_bytes_billed, query_timeout_seconds)
+            result = query_dataframe(client, sql, query_timeout_seconds)
+            for _, record in result.iterrows():
+                rows.append(
+                    YearSeriesRow(
+                        source="Base dos Dados",
+                        table=table.table,
+                        year_column=year_column,
+                        year=int(record["ano"]) if pd.notna(record["ano"]) else None,
+                        total_records=int(record["total_registros"]) if pd.notna(record["total_registros"]) else None,
+                        status="consulta executada",
+                    )
+                )
+        except Exception as exc:
+            rows.append(
+                YearSeriesRow(
+                    source="Base dos Dados",
+                    table=table.table,
+                    year_column=None,
+                    year=None,
+                    total_records=None,
+                    status=f"erro: {type(exc).__name__}: {exc}",
+                )
+            )
 
     return pd.DataFrame([asdict(row) for row in rows])
 
@@ -256,21 +346,48 @@ def parse_args() -> argparse.Namespace:
         help="Limite de bytes faturados por query.",
     )
     parser.add_argument(
+        "--query-timeout-seconds",
+        type=int,
+        default=int(os.getenv("BIGQUERY_QUERY_TIMEOUT_SECONDS", "60")),
+        help="Timeout por chamada ao BigQuery.",
+    )
+    parser.add_argument(
         "--output",
         default="data/profiles/basedosdados_audit.csv",
         help="Caminho do CSV de saida.",
+    )
+    parser.add_argument(
+        "--year-series-output",
+        default="data/profiles/basedosdados_year_series.csv",
+        help="Caminho do CSV de series anuais. Gerado apenas com --execute.",
     )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    audit = audit_tables(args.project_id, execute=args.execute, max_bytes_billed=args.max_bytes_billed)
+    audit = audit_tables(
+        args.project_id,
+        execute=args.execute,
+        max_bytes_billed=args.max_bytes_billed,
+        query_timeout_seconds=args.query_timeout_seconds,
+    )
     output = resolve_project_path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     audit.to_csv(output, index=False, encoding="utf-8")
     print(f"Auditoria salva em: {output.relative_to(ROOT)}")
     print(audit[["table", "decision", "estimated_bytes", "status"]].to_string(index=False))
+
+    if args.execute:
+        year_series = audit_year_series(
+            args.project_id,
+            max_bytes_billed=args.max_bytes_billed,
+            query_timeout_seconds=args.query_timeout_seconds,
+        )
+        year_series_output = resolve_project_path(args.year_series_output)
+        year_series_output.parent.mkdir(parents=True, exist_ok=True)
+        year_series.to_csv(year_series_output, index=False, encoding="utf-8")
+        print(f"Series anuais salvas em: {year_series_output.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
