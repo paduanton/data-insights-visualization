@@ -3,6 +3,10 @@ CREATE SCHEMA IF NOT EXISTS silver;
 CREATE SCHEMA IF NOT EXISTS gold;
 
 DROP VIEW IF EXISTS gold.qualidade_registros;
+DROP VIEW IF EXISTS gold.razao_incidencia_grupo_racial_municipio_ano;
+DROP VIEW IF EXISTS gold.incidencia_grupo_racial_municipio_ano;
+DROP VIEW IF EXISTS gold.diagnostico_materno_grupo_racial_municipio_ano;
+DROP VIEW IF EXISTS gold.prenatal_grupo_racial_municipio_ano;
 DROP VIEW IF EXISTS gold.sinasc_nv_ano_raca;
 DROP VIEW IF EXISTS gold.sinan_sc_sem_prenatal_escolaridade;
 DROP VIEW IF EXISTS gold.sinan_sc_ano_prenatal;

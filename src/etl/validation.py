@@ -4,8 +4,8 @@ from src.etl.database import query_scalar
 
 
 VALIDATION_CHECKS = {
-    "SINAN/SIFCBR bruto": "SELECT COUNT(*) FROM bronze.sinan_sifilis_congenita",
-    "SINASC bruto": "SELECT COUNT(*) FROM bronze.sinasc_nascidos_vivos",
+    "SINAN/SIFCBR bruto": "SELECT COUNT(*) FROM bronze.sinan_sifilis_congenita WHERE source_year = '2024'",
+    "SINASC bruto": "SELECT COUNT(*) FROM bronze.sinasc_nascidos_vivos WHERE source_year = '2024'",
     "SINAN Porto Alegre": (
         "SELECT COUNT(*) FROM silver.sinan_sifilis_congenita "
         "WHERE ano = 2024 AND cod_municipio_residencia = '431490'"

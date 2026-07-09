@@ -79,6 +79,15 @@ The pipeline uses PostgreSQL as a local analytical database.
 - `silver`: views with normalized codes and categories.
 - `gold`: aggregated views for indicators and analytical queries.
 
+Consolidated analytical views:
+
+- `gold.indicadores_municipio_ano`: cases, live births, and general incidence by municipality/year.
+- `gold.incidencia_grupo_racial_municipio_ano`: estimated incidence by maternal racial group.
+- `gold.razao_incidencia_grupo_racial_municipio_ano`: incidence ratio between Black and non-Black mothers.
+- `gold.prenatal_grupo_racial_municipio_ano`: prenatal care distribution among cases by racial group.
+- `gold.diagnostico_materno_grupo_racial_municipio_ano`: maternal diagnosis timing by racial group.
+- `gold.qualidade_registros`: ignored values by critical variable.
+
 Image to add:
 
 - `docs/assets/architecture.png`

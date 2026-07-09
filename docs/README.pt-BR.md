@@ -79,6 +79,15 @@ O pipeline usa PostgreSQL como banco analítico local.
 - `silver`: views com códigos e categorias normalizadas.
 - `gold`: views agregadas para indicadores e consultas analíticas.
 
+Views analíticas consolidadas:
+
+- `gold.indicadores_municipio_ano`: casos, nascidos vivos e incidência geral por município/ano.
+- `gold.incidencia_grupo_racial_municipio_ano`: incidência estimada por grupo racial materno.
+- `gold.razao_incidencia_grupo_racial_municipio_ano`: razão de incidência entre mães negras e mães não negras.
+- `gold.prenatal_grupo_racial_municipio_ano`: distribuição de pré-natal entre casos por grupo racial.
+- `gold.diagnostico_materno_grupo_racial_municipio_ano`: momento do diagnóstico materno por grupo racial.
+- `gold.qualidade_registros`: ignorados por variável crítica.
+
 Imagem a adicionar:
 
 - `docs/assets/architecture.png`
