@@ -1,8 +1,14 @@
-# Congenital Syphilis In Porto Alegre
+# Congenital Syphilis In Porto Alegre, RS, Brazil
 
 ## Overview
 
-This project organizes an analytical pipeline to study congenital syphilis in Porto Alegre using public microdata. It focuses on the relationship between maternal race/color, prenatal care access, maternal education, and incidence of reported cases.
+This project organizes an analytical pipeline to study congenital syphilis in Porto Alegre, a municipality in Rio Grande do Sul, Brazil, using public microdata. It focuses on the relationship between maternal race/color, prenatal care access, maternal education, recorded maternal care, and incidence of reported cases.
+
+Geographic and temporal scope:
+
+- Main analytical cut: Porto Alegre (`431490`), Rio Grande do Sul, Brazil.
+- Datasets loaded into PostgreSQL: Rio Grande do Sul, `2015-2024`.
+- Final indicators: aggregated by municipality, year, and strata; no individual-level linkage between datasets.
 
 The repository combines:
 
@@ -16,14 +22,14 @@ The repository combines:
 
 Core sources:
 
-- `data/raw/sinan/sifilis_congenita/SIFCBR15.dbc` to `data/raw/sinan/sifilis_congenita/SIFCBR24.dbc`: SINAN/SIFCBR 2015-2024, congenital syphilis notifications.
+- `data/raw/sinan/sifilis_congenita/SIFCBR15.dbc` to `data/raw/sinan/sifilis_congenita/SIFCBR24.dbc`: SINAN/SIFCBR 2015-2024, congenital syphilis notifications in Brazil, filtered in queries to Rio Grande do Sul and Porto Alegre.
 - `data/raw/sinasc/DNRS2015.dbc` to `data/raw/sinasc/DNRS2024.dbc`: SINASC 2015-2024, live births in Rio Grande do Sul.
 
 Sources preserved for expansion:
 
-- `data/raw/cnes/st/STRS1512.dbc` to `data/raw/cnes/st/STRS2412.dbc`: CNES/ST, December of each year as the annual snapshot.
+- `data/raw/cnes/st/STRS1512.dbc` to `data/raw/cnes/st/STRS2412.dbc`: CNES/ST for Rio Grande do Sul, December of each year as the annual snapshot.
 - `data/raw/cnes/ep/` and `data/raw/cnes/sr/`: complementary CNES, also filtered to December 2015-2024.
-- `data/raw/sim/do/DORS2015.dbc` to `data/raw/sim/do/DORS2024.dbc`: SIM 2015-2024, general deaths.
+- `data/raw/sim/do/DORS2015.dbc` to `data/raw/sim/do/DORS2024.dbc`: SIM 2015-2024, general deaths in Rio Grande do Sul.
 - `data/raw/sim/dofet/`, `data/raw/sim/doinf/`, and `data/raw/sim/domat/`: complementary SIM.
 - `data/raw/populacao_datasus/`: complementary DATASUS/IBGE population.
 
