@@ -7,6 +7,12 @@ Full documentation:
 - [Português](docs/README.pt-BR.md)
 - [English](docs/README.en.md)
 
+## Project Diagrams
+
+![Architecture diagram](docs/assets/architecture.png)
+
+![ETL flow diagram](docs/assets/etl-flow.png)
+
 ## Quick Start
 
 ```bash
