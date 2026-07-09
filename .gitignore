@@ -26,6 +26,7 @@ build/
 # Local tooling
 .codex_tmp/
 .cache/
+.matplotlib/
 
 # Docker and database local state
 postgres_data/

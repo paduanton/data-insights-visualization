@@ -31,6 +31,13 @@ Auxiliary source for inventory and validation:
 
 - Base dos Dados through `basedosdados` and `google-cloud-bigquery`, with auditing of useful BigQuery tables for SINASC, SIM, CNES, municipal population, SIH, and SINAN technical reference.
 
+Planned use of Base dos Dados:
+
+- `notebooks/analytics/02_auditoria_basedosdados.ipynb` audits availability, columns, period coverage, and estimated BigQuery cost.
+- The main implementation continues to use local DATASUS `.dbc` microdata.
+- Base dos Dados may be used for cross-validation of totals, fast exploratory queries, and contextual enrichment when coverage and cost are adequate.
+- It should not automatically replace DATASUS/IBGE as the documented primary source of the pipeline.
+
 Structure for historical consolidation:
 
 - `data/raw/sinan/sifilis_congenita/`: `SIFCBR*.dbc` files.
@@ -276,19 +283,18 @@ Decision profile for critical variables:
 - SINAN/SIFCBR education should be reviewed with the official data dictionary before refining final categories, because codes such as `00`, `01`, and `10` exist in the historical period and currently map to `Ignorada/sem informacao`.
 - Ignored, empty, or missing categories remain preserved and measured in the queries.
 
-Images for new results should be added under:
+Generated images:
 
-- `docs/assets/results/`
-
-Recommended image for the next result:
-
-- `docs/assets/results/incidencia_por_grupo_racial.png`
-- `docs/assets/results/razao_incidencia_grupo_racial.png`
-- `docs/assets/results/auditoria_basedosdados_periodos.png`
-- `docs/assets/results/perfil_colunas_qualidade.png`
 - `docs/assets/results/serie_historica_incidencia.png`
 - `docs/assets/results/desigualdade_racial_incidencia.png`
+- `docs/assets/results/razao_incidencia_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
+- `docs/assets/results/contexto_cnes_ibge_sim.png`
+
+Images pending generation:
+
+- `docs/assets/results/auditoria_basedosdados_periodos.png`
+- `docs/assets/results/perfil_colunas_qualidade.png`
 
 ## Limitations
 

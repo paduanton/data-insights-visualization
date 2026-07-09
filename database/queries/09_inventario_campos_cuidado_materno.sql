@@ -9,13 +9,13 @@ FROM information_schema.columns
 WHERE table_schema IN ('bronze', 'silver')
   AND table_name IN ('sinan_sifilis_congenita', 'sinasc_nascidos_vivos')
   AND (
-      column_name ILIKE '%pre%'
-      OR column_name ILIKE '%diag%'
-      OR column_name ILIKE '%trat%'
-      OR column_name ILIKE '%esq%'
-      OR column_name ILIKE '%esc%'
-      OR column_name ILIKE '%idade%'
-      OR column_name ILIKE '%raca%'
-      OR column_name ILIKE '%cor%'
+      POSITION('pre' IN LOWER(column_name)) > 0
+      OR POSITION('diag' IN LOWER(column_name)) > 0
+      OR POSITION('trat' IN LOWER(column_name)) > 0
+      OR POSITION('esq' IN LOWER(column_name)) > 0
+      OR POSITION('esc' IN LOWER(column_name)) > 0
+      OR POSITION('idade' IN LOWER(column_name)) > 0
+      OR POSITION('raca' IN LOWER(column_name)) > 0
+      OR POSITION('cor' IN LOWER(column_name)) > 0
   )
 ORDER BY table_schema, table_name, column_name;

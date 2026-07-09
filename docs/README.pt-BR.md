@@ -31,6 +31,13 @@ Fonte auxiliar para inventário e validação:
 
 - Base dos Dados via `basedosdados` e `google-cloud-bigquery`, com auditoria de tabelas BigQuery úteis para SINASC, SIM, CNES, população municipal, SIH e referência técnica SINAN.
 
+Uso previsto da Base dos Dados:
+
+- `notebooks/analytics/02_auditoria_basedosdados.ipynb` audita disponibilidade, colunas, período e custo estimado via BigQuery.
+- A implementação principal continua usando microdados DATASUS locais em `.dbc`.
+- Base dos Dados pode ser usada para validação cruzada de totais, consulta exploratória rápida e enriquecimento contextual quando a cobertura e o custo forem adequados.
+- Não deve substituir automaticamente DATASUS/IBGE como fonte primária documentada do pipeline.
+
 Estrutura para consolidação histórica:
 
 - `data/raw/sinan/sifilis_congenita/`: arquivos `SIFCBR*.dbc`.
@@ -276,19 +283,18 @@ Perfil decisório das variáveis críticas:
 - A escolaridade do SINAN/SIFCBR deve ser revisada com dicionário oficial antes de refinar categorias finais, porque códigos como `00`, `01` e `10` existem no período histórico e atualmente entram como `Ignorada/sem informacao`.
 - Categorias ignoradas, vazias ou sem informação permanecem preservadas e mensuradas nas consultas.
 
-Imagens de novos resultados devem ser adicionadas em:
+Imagens geradas:
 
-- `docs/assets/results/`
-
-Imagem recomendada para o próximo resultado:
-
-- `docs/assets/results/incidencia_por_grupo_racial.png`
-- `docs/assets/results/razao_incidencia_grupo_racial.png`
-- `docs/assets/results/auditoria_basedosdados_periodos.png`
-- `docs/assets/results/perfil_colunas_qualidade.png`
 - `docs/assets/results/serie_historica_incidencia.png`
 - `docs/assets/results/desigualdade_racial_incidencia.png`
+- `docs/assets/results/razao_incidencia_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
+- `docs/assets/results/contexto_cnes_ibge_sim.png`
+
+Imagens pendentes de geração:
+
+- `docs/assets/results/auditoria_basedosdados_periodos.png`
+- `docs/assets/results/perfil_colunas_qualidade.png`
 
 ## Limitações
 
