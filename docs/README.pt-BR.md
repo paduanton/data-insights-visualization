@@ -31,12 +31,12 @@ Fonte auxiliar para inventário e validação:
 
 - Base dos Dados via `basedosdados` e `google-cloud-bigquery`, com auditoria de tabelas BigQuery úteis para SINASC, SIM, CNES, população municipal, SIH e referência técnica SINAN.
 
-Uso previsto da Base dos Dados:
+Uso no projeto da Base dos Dados:
 
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb` audita disponibilidade, colunas, período e custo estimado via BigQuery.
 - `python -m src.etl.audit_basedosdados` gera uma matriz CSV de auditoria em `data/profiles/basedosdados_audit.csv`.
 - A implementação principal continua usando microdados DATASUS locais em `.dbc`.
-- Base dos Dados pode ser usada para validação cruzada de totais, consulta exploratória rápida e enriquecimento contextual quando a cobertura e o custo forem adequados.
+- Base dos Dados é usada para validação cruzada de cobertura, consulta exploratória rápida e enriquecimento contextual com população municipal.
 - Não deve substituir automaticamente DATASUS/IBGE como fonte primária documentada do pipeline.
 
 Estrutura para consolidação histórica:
@@ -49,7 +49,7 @@ Estrutura para consolidação histórica:
 - `data/raw/populacao_datasus/`: arquivos populacionais complementares.
 - `data/ignored/`: arquivos preservados fora do recorte principal.
 - `data/staging/`: conversões exploratórias.
-- `data/profiles/`: perfis gerados antes do schema final.
+- `data/profiles/`: perfis gerados para auditoria de colunas, cobertura e qualidade.
 
 Inventário consolidado da janela `2015-2024`:
 
@@ -95,9 +95,10 @@ Views analíticas consolidadas:
 - `gold.sintese_desigualdade_racial_municipio_ano`: camada final com razão, diferença absoluta e excesso relativo da incidência.
 - `gold.prenatal_grupo_racial_municipio_ano`: distribuição de pré-natal entre casos por grupo racial.
 - `gold.diagnostico_materno_grupo_racial_municipio_ano`: momento do diagnóstico materno por grupo racial.
+- `gold.tratamento_materno_grupo_racial_municipio_ano`: tratamento materno adequado por grupo racial.
 - `gold.qualidade_registros`: ignorados por variável crítica.
 
-Imagem a adicionar:
+Caminho reservado para o diagrama de arquitetura:
 
 - `docs/assets/architecture.png`
 
@@ -139,7 +140,7 @@ Para carga multi-ano, use:
 python -m src.etl.load_datasus --years 2015:2024
 ```
 
-O comando multi-ano procura arquivos na estrutura histórica planejada e também preserva fallback para o MVP 2024 atual.
+O comando multi-ano procura arquivos na estrutura histórica consolidada e também preserva fallback para o MVP 2024 atual.
 
 Antes de baixar novos arquivos, gere um inventário:
 
@@ -178,13 +179,13 @@ python -m src.etl.load_basedosdados --years 2015:2024
 
 ## Pipeline ETL
 
-O ETL converte arquivos `.dbc` para `.dbf`, lê os registros com `dbfread`, normaliza nomes de colunas e carrega os dados no PostgreSQL. A carga é idempotente por ano: ao recarregar o mesmo ano, os registros anteriores daquele ano são substituídos. Nas tabelas `bronze`, colunas novas encontradas em anos posteriores são adicionadas como `TEXT`, preservando variações dos microdados até a decisão do schema final.
+O ETL converte arquivos `.dbc` para `.dbf`, lê os registros com `dbfread`, normaliza nomes de colunas e carrega os dados no PostgreSQL. A carga é idempotente por ano: ao recarregar o mesmo ano, os registros anteriores daquele ano são substituídos. Nas tabelas `bronze`, colunas novas encontradas em anos posteriores são adicionadas como `TEXT`, preservando variações dos microdados sem quebrar as views analíticas consolidadas.
 
-Imagem a adicionar:
+Caminho reservado para o diagrama do fluxo ETL:
 
 - `docs/assets/etl-flow.png`
 
-Antes do schema analítico final, gere perfis exploratórios:
+Para auditar colunas e qualidade, gere perfis exploratórios:
 
 ```bash
 python -m src.etl.profile_datasus --years 2015:2024
@@ -197,7 +198,7 @@ python -m src.etl.profile_datasus --years 2015:2024 --skip-core --include-cnes -
 python -m src.etl.profile_datasus --years 2015:2024 --skip-core --include-sim --output data/profiles/sim_do_column_profile_2015_2024.csv
 ```
 
-Os perfis são salvos em `data/profiles/` e devem orientar a decisão de colunas, categorias e views finais.
+Os perfis são salvos em `data/profiles/` e permitem revisar colunas, categorias e qualidade das views finais.
 
 ## Consultas
 
@@ -216,6 +217,8 @@ Consultas iniciais:
 - `database/queries/11_contexto_sim_municipio.sql`: óbitos gerais e causa básica `A50` no SIM por município de residência.
 - `database/queries/12_perfil_variaveis_criticas.sql`: distribuição de códigos brutos, categorias analíticas e percentuais das variáveis críticas.
 - `database/queries/13_sintese_desigualdade_racial.sql`: síntese anual da desigualdade racial na incidência de sífilis congênita.
+- `database/queries/14_contexto_integrado_municipio.sql`: contexto integrado de incidência, população, CNES e SIM.
+- `database/queries/15_tratamento_materno_por_grupo_racial.sql`: tratamento materno adequado por grupo racial.
 
 Cada nova consulta deve responder uma pergunta analítica explícita e, quando gerar resultado relevante, deve ser documentada neste arquivo e em `docs/README.en.md`.
 
@@ -223,16 +226,16 @@ Cada nova consulta deve responder uma pergunta analítica explícita e, quando g
 
 Os notebooks devem ficar em `notebooks/analytics/` e responder perguntas analíticas específicas. O notebook de visualização existente permanece como referência inicial do projeto.
 
-Notebooks iniciais:
+Notebooks analíticos:
 
 - `notebooks/analytics/00_validacao_ambiente_dados.ipynb`: validação de ambiente, Docker, testes e carga strict.
 - `notebooks/analytics/01_overview_sifilis_congenita.ipynb`: panorama do recorte Porto Alegre e incidência geral.
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb`: auditoria de cobertura, custo e uso possível da Base dos Dados.
 - `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb`: cruzamento entre pré-natal, raça/cor e escolaridade.
-- `notebooks/analytics/04_perfil_colunas_qualidade.ipynb`: profiling das colunas e variáveis críticas antes do schema final.
+- `notebooks/analytics/04_perfil_colunas_qualidade.ipynb`: profiling das colunas e variáveis críticas do schema analítico.
 - `notebooks/analytics/05_serie_historica_incidencia.ipynb`: evolução anual da incidência em Porto Alegre.
 - `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb`: incidência e razão de incidência por grupo racial.
-- `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: diagnóstico materno e base para análise de tratamento.
+- `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: diagnóstico materno e tratamento materno adequado.
 - `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventário e uso contextual de CNES, IBGE e SIM.
 - `notebooks/analytics/09_sintese_desigualdade_racial.ipynb`: camada final de síntese dos indicadores de desigualdade racial.
 - `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb`: contexto integrado com população da Base dos Dados, CNES, SIM e incidência.
@@ -251,7 +254,7 @@ Cada notebook deve ser executado a partir da raiz do repositório ou pelo Google
 | `notebooks/analytics/04_perfil_colunas_qualidade.ipynb` | Quais colunas e variáveis críticas sustentam o schema analítico final? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/04_perfil_colunas_qualidade.ipynb) | `docs/assets/results/perfil_colunas_qualidade.png` |
 | `notebooks/analytics/05_serie_historica_incidencia.ipynb` | Como a incidência de sífilis congênita evolui nos anos carregados? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/05_serie_historica_incidencia.ipynb) | `docs/assets/results/serie_historica_incidencia.png` |
 | `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb` | A incidência estimada difere entre mães negras e mães não negras? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/06_desigualdade_racial_incidencia.ipynb) | `docs/assets/results/desigualdade_racial_incidencia.png` |
-| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | O momento do diagnóstico materno indica diferenças no cuidado registrado? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png` |
+| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Diagnóstico materno e tratamento adequado registrado indicam diferenças no cuidado entre grupos raciais? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/tratamento_materno_grupo_racial.png` |
 | `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Quais fontes complementares podem contextualizar oferta assistencial, população e desfechos? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
 | `notebooks/analytics/09_sintese_desigualdade_racial.ipynb` | A série histórica confirma desigualdade persistente na incidência entre mães negras e mães não negras? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/09_sintese_desigualdade_racial.ipynb) | `docs/assets/results/sintese_desigualdade_racial.png` |
 | `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb` | Como a incidência de sífilis congênita se posiciona junto ao contexto populacional, assistencial e de mortalidade? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/10_contexto_integrado_basedosdados.ipynb) | `docs/assets/results/contexto_integrado_basedosdados.png` |
@@ -296,11 +299,11 @@ Série validada para Porto Alegre:
 | 2023 | 307 | 13663 | 22,47 |
 | 2024 | 137 | 12850 | 10,66 |
 
-Esses resultados confirmam que a base histórica está carregada e consultável, mas o schema analítico final ainda deve ser fechado após leitura dos perfis de colunas e qualidade.
+Esses resultados confirmam que a base histórica está carregada, consultável e sustentando o schema analítico consolidado para o recorte `2015-2024`.
 
 Perfil decisório das variáveis críticas:
 
-- SINAN/SIFCBR possui campos estáveis para raça/cor materna, pré-natal, escolaridade, diagnóstico materno e município de residência em `2015-2024`.
+- SINAN/SIFCBR possui campos estáveis para raça/cor materna, pré-natal, escolaridade, diagnóstico materno, tratamento materno adequado e município de residência em `2015-2024`.
 - SINASC possui campos estáveis para raça/cor materna, consultas de pré-natal, escolaridade materna e município de residência em `2015-2024`.
 - CNES/ST possui campos estáveis para estabelecimento, município, tipo de unidade e atividade no snapshot anual de dezembro.
 - SIM/DO possui campos estáveis para município de residência, município de ocorrência, causa básica, data do óbito e raça/cor.
@@ -313,6 +316,7 @@ Imagens geradas:
 - `docs/assets/results/desigualdade_racial_incidencia.png`
 - `docs/assets/results/razao_incidencia_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
+- `docs/assets/results/tratamento_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
 - `docs/assets/results/sintese_desigualdade_racial.png`
 - `docs/assets/results/perfil_colunas_qualidade.png`
@@ -323,6 +327,7 @@ Leitura da camada final:
 
 - A razão de incidência entre mães negras e mães não negras permanece acima de `1` em todos os anos carregados.
 - Em `2024`, a incidência entre mães negras foi `1,54` vez a incidência entre mães não negras, com diferença absoluta de `4,95` casos por 1.000 nascidos vivos.
+- Em `2024`, o tratamento materno inadequado foi registrado em `98,2%` dos casos de mães negras e em `85,0%` dos casos de mães não negras em Porto Alegre.
 - A queda geral da incidência após `2022` não elimina a desigualdade relativa entre os grupos.
 - As análises de pré-natal, escolaridade e diagnóstico materno devem ser lidas como estratos descritivos dos casos notificados, não como pareamento individual nem inferência causal.
 

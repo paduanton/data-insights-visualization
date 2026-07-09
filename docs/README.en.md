@@ -31,12 +31,12 @@ Auxiliary source for inventory and validation:
 
 - Base dos Dados through `basedosdados` and `google-cloud-bigquery`, with auditing of useful BigQuery tables for SINASC, SIM, CNES, municipal population, SIH, and SINAN technical reference.
 
-Planned use of Base dos Dados:
+Base dos Dados use in the project:
 
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb` audits availability, columns, period coverage, and estimated BigQuery cost.
 - `python -m src.etl.audit_basedosdados` generates an audit CSV matrix at `data/profiles/basedosdados_audit.csv`.
 - The main implementation continues to use local DATASUS `.dbc` microdata.
-- Base dos Dados may be used for cross-validation of totals, fast exploratory queries, and contextual enrichment when coverage and cost are adequate.
+- Base dos Dados is used for coverage cross-validation, fast exploratory queries, and contextual enrichment with municipal population.
 - It should not automatically replace DATASUS/IBGE as the documented primary source of the pipeline.
 
 Structure for historical consolidation:
@@ -49,7 +49,7 @@ Structure for historical consolidation:
 - `data/raw/populacao_datasus/`: complementary population files.
 - `data/ignored/`: preserved files outside the main scope.
 - `data/staging/`: exploratory conversions.
-- `data/profiles/`: profiles generated before the final schema.
+- `data/profiles/`: profiles generated for column, coverage, and quality auditing.
 
 Consolidated inventory for the `2015-2024` window:
 
@@ -95,9 +95,10 @@ Consolidated analytical views:
 - `gold.sintese_desigualdade_racial_municipio_ano`: final layer with incidence ratio, absolute difference, and relative excess.
 - `gold.prenatal_grupo_racial_municipio_ano`: prenatal care distribution among cases by racial group.
 - `gold.diagnostico_materno_grupo_racial_municipio_ano`: maternal diagnosis timing by racial group.
+- `gold.tratamento_materno_grupo_racial_municipio_ano`: adequate maternal treatment by racial group.
 - `gold.qualidade_registros`: ignored values by critical variable.
 
-Image to add:
+Reserved path for the architecture diagram:
 
 - `docs/assets/architecture.png`
 
@@ -139,7 +140,7 @@ For multi-year loads, use:
 python -m src.etl.load_datasus --years 2015:2024
 ```
 
-The multi-year command searches the planned historical structure and also preserves fallback paths for the current 2024 MVP.
+The multi-year command searches the consolidated historical structure and also preserves fallback paths for the current 2024 MVP.
 
 Before downloading new files, generate an inventory:
 
@@ -178,13 +179,13 @@ python -m src.etl.load_basedosdados --years 2015:2024
 
 ## ETL Pipeline
 
-The ETL converts `.dbc` files to `.dbf`, reads records with `dbfread`, normalizes column names, and loads the data into PostgreSQL. The load is idempotent by year: when the same year is loaded again, previous records for that year are replaced. In `bronze` tables, new columns found in later years are added as `TEXT`, preserving microdata variations until the final schema decision.
+The ETL converts `.dbc` files to `.dbf`, reads records with `dbfread`, normalizes column names, and loads the data into PostgreSQL. The load is idempotent by year: when the same year is loaded again, previous records for that year are replaced. In `bronze` tables, new columns found in later years are added as `TEXT`, preserving source microdata variations without breaking the consolidated analytical views.
 
-Image to add:
+Reserved path for the ETL flow diagram:
 
 - `docs/assets/etl-flow.png`
 
-Before the final analytical schema, generate exploratory profiles:
+To audit columns and quality, generate exploratory profiles:
 
 ```bash
 python -m src.etl.profile_datasus --years 2015:2024
@@ -197,7 +198,7 @@ python -m src.etl.profile_datasus --years 2015:2024 --skip-core --include-cnes -
 python -m src.etl.profile_datasus --years 2015:2024 --skip-core --include-sim --output data/profiles/sim_do_column_profile_2015_2024.csv
 ```
 
-Profiles are saved under `data/profiles/` and should guide final column, category, and view decisions.
+Profiles are saved under `data/profiles/` and support review of columns, categories, and final view quality.
 
 ## Queries
 
@@ -216,6 +217,8 @@ Initial queries:
 - `database/queries/11_contexto_sim_municipio.sql`: general deaths and `A50` underlying cause in SIM by municipality of residence.
 - `database/queries/12_perfil_variaveis_criticas.sql`: distribution of raw codes, analytical categories, and percentages for critical variables.
 - `database/queries/13_sintese_desigualdade_racial.sql`: annual synthesis of racial inequality in congenital syphilis incidence.
+- `database/queries/14_contexto_integrado_municipio.sql`: integrated incidence, population, CNES, and SIM context.
+- `database/queries/15_tratamento_materno_por_grupo_racial.sql`: adequate maternal treatment by racial group.
 
 Each new query must answer an explicit analytical question and, when it produces a relevant result, it must be documented in this file and in `docs/README.pt-BR.md`.
 
@@ -223,16 +226,16 @@ Each new query must answer an explicit analytical question and, when it produces
 
 Notebooks should live in `notebooks/analytics/` and answer specific analytical questions. The existing visualization notebook remains as an initial project reference.
 
-Initial notebooks:
+Analytical notebooks:
 
 - `notebooks/analytics/00_validacao_ambiente_dados.ipynb`: environment, Docker, tests, and strict load validation.
 - `notebooks/analytics/01_overview_sifilis_congenita.ipynb`: Porto Alegre subset overview and general incidence.
 - `notebooks/analytics/02_auditoria_basedosdados.ipynb`: coverage, cost, and possible-use audit for Base dos Dados.
 - `notebooks/analytics/03_prenatal_raca_escolaridade.ipynb`: prenatal care, race/color, and education cross-analysis.
-- `notebooks/analytics/04_perfil_colunas_qualidade.ipynb`: column and critical-variable profiling before the final schema.
+- `notebooks/analytics/04_perfil_colunas_qualidade.ipynb`: column and critical-variable profiling for the analytical schema.
 - `notebooks/analytics/05_serie_historica_incidencia.ipynb`: annual incidence trend in Porto Alegre.
 - `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb`: incidence and incidence ratio by racial group.
-- `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: maternal diagnosis and basis for treatment analysis.
+- `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: maternal diagnosis and adequate maternal treatment.
 - `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventory and contextual use of CNES, IBGE, and SIM.
 - `notebooks/analytics/09_sintese_desigualdade_racial.ipynb`: final synthesis layer for racial inequality indicators.
 - `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb`: integrated context with Base dos Dados population, CNES, SIM, and incidence.
@@ -251,7 +254,7 @@ Each notebook should be run from the repository root or through Google Colab. Wh
 | `notebooks/analytics/04_perfil_colunas_qualidade.ipynb` | Which columns and critical variables support the final analytical schema? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/04_perfil_colunas_qualidade.ipynb) | `docs/assets/results/perfil_colunas_qualidade.png` |
 | `notebooks/analytics/05_serie_historica_incidencia.ipynb` | How does congenital syphilis incidence evolve across loaded years? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/05_serie_historica_incidencia.ipynb) | `docs/assets/results/serie_historica_incidencia.png` |
 | `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb` | Does estimated incidence differ between Black and non-Black mothers? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/06_desigualdade_racial_incidencia.ipynb) | `docs/assets/results/desigualdade_racial_incidencia.png` |
-| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Does maternal diagnosis timing indicate differences in recorded care? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png` |
+| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Do maternal diagnosis and recorded adequate treatment indicate differences in care between racial groups? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/tratamento_materno_grupo_racial.png` |
 | `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Which complementary sources can contextualize service supply, population, and outcomes? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
 | `notebooks/analytics/09_sintese_desigualdade_racial.ipynb` | Does the historical series confirm persistent incidence inequality between Black and non-Black mothers? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/09_sintese_desigualdade_racial.ipynb) | `docs/assets/results/sintese_desigualdade_racial.png` |
 | `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb` | How does congenital syphilis incidence sit alongside population, service-supply, and mortality context? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/10_contexto_integrado_basedosdados.ipynb) | `docs/assets/results/contexto_integrado_basedosdados.png` |
@@ -296,11 +299,11 @@ Validated series for Porto Alegre:
 | 2023 | 307 | 13663 | 22.47 |
 | 2024 | 137 | 12850 | 10.66 |
 
-These results confirm that the historical database is loaded and queryable, but the final analytical schema should still be closed only after reviewing column and quality profiles.
+These results confirm that the historical database is loaded, queryable, and supporting the consolidated analytical schema for the `2015-2024` cut.
 
 Decision profile for critical variables:
 
-- SINAN/SIFCBR has stable fields for maternal race/color, prenatal care, education, maternal diagnosis timing, and municipality of residence across `2015-2024`.
+- SINAN/SIFCBR has stable fields for maternal race/color, prenatal care, education, maternal diagnosis timing, adequate maternal treatment, and municipality of residence across `2015-2024`.
 - SINASC has stable fields for maternal race/color, prenatal consultations, maternal education, and municipality of residence across `2015-2024`.
 - CNES/ST has stable fields for facility, municipality, unit type, and activity in the December annual snapshot.
 - SIM/DO has stable fields for municipality of residence, municipality of occurrence, underlying cause, date of death, and race/color.
@@ -313,6 +316,7 @@ Generated images:
 - `docs/assets/results/desigualdade_racial_incidencia.png`
 - `docs/assets/results/razao_incidencia_grupo_racial.png`
 - `docs/assets/results/diagnostico_materno_grupo_racial.png`
+- `docs/assets/results/tratamento_materno_grupo_racial.png`
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
 - `docs/assets/results/sintese_desigualdade_racial.png`
 - `docs/assets/results/perfil_colunas_qualidade.png`
@@ -323,6 +327,7 @@ Final-layer reading:
 
 - The incidence ratio between Black and non-Black mothers remains above `1` in every loaded year.
 - In `2024`, incidence among Black mothers was `1.54` times the incidence among non-Black mothers, with an absolute difference of `4.95` cases per 1,000 live births.
+- In `2024`, inadequate maternal treatment was recorded in `98.2%` of cases among Black mothers and `85.0%` among non-Black mothers in Porto Alegre.
 - The overall incidence drop after `2022` does not remove the relative inequality between groups.
 - Prenatal care, education, and maternal diagnosis analyses should be read as descriptive strata of reported cases, not as individual-level linkage or causal inference.
 
