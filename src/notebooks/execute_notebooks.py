@@ -23,6 +23,8 @@ DEFAULT_NOTEBOOKS = [
     "notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb",
     "notebooks/analytics/09_sintese_desigualdade_racial.ipynb",
     "notebooks/analytics/10_contexto_integrado_basedosdados.ipynb",
+    "notebooks/11_analise_interseccional_desigualdade.ipynb",
+    "notebooks/12_relatorio_final_consolidado.ipynb",
     "notebooks/visualizacao_sifilis_congenita_poars.ipynb",
 ]
 
