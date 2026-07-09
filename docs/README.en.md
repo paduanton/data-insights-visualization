@@ -55,12 +55,13 @@ Structure for historical consolidation:
 - `data/raw/populacao_datasus/`: complementary population files.
 - `data/ignored/`: preserved files outside the main scope.
 - `data/staging/`: exploratory conversions.
-- `data/profiles/`: profiles generated for column, coverage, and quality auditing.
+- `data/profiles/`: tracked aggregate profiles for column, coverage, and quality auditing. This directory preserves lightweight evidence of accuracy without individual-level microdata.
 
 Consolidated inventory for the `2015-2024` window:
 
 - `docs/inventario_bases.md`: main coverage, selected CNES files, and summary of preserved/ignored files.
 - `data/profiles/datasus_file_inventory.csv`: detailed inventory generated locally.
+- `data/profiles/README.md`: description of tracked profiles and local artifacts that remain ignored.
 
 To check missing files in the current cut:
 

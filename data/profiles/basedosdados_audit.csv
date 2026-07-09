@@ -1,0 +1,7 @@
+source,table,planned_use,decision,available_period,total_records,year_column,municipality_column,estimated_bytes,status
+Base dos Dados,basedosdados.br_ms_sinasc.microdados,"Nascidos vivos, denominador de incidencia e perfil materno",validar,1994-2024,4411838,ano,id_municipio_residencia,0.096 GiB,consulta executada
+Base dos Dados,basedosdados.br_ms_sim.microdados,Mortalidade e desfechos agregados,validar,1996-2024,2333144,ano,id_municipio_residencia,0.083 GiB,consulta executada
+Base dos Dados,basedosdados.br_ms_cnes.estabelecimento,Oferta assistencial por municipio/ano,validar,2005-2025,5517379,ano,id_municipio,0.000 GiB,consulta executada
+Base dos Dados,basedosdados.br_ms_populacao.municipio,Populacao municipal e contexto demografico,validar,2000-2025,4919222,ano,id_municipio,0.037 GiB,consulta executada
+Base dos Dados,basedosdados.br_ms_sih.servicos_profissionais,Contexto hospitalar/assistencial complementar,opcional,2008-2025,179966227,ano,,0.000 GiB,consulta executada
+Base dos Dados,basedosdados.br_ms_sinan.microdados_violencia,"Referencia tecnica para padrao de consumo SINAN, nao para sifilis congenita",referencia,2009-2019,2299142,ano,id_municipio_residencia,0.000 GiB,consulta executada

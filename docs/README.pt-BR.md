@@ -55,12 +55,13 @@ Estrutura para consolidação histórica:
 - `data/raw/populacao_datasus/`: arquivos populacionais complementares.
 - `data/ignored/`: arquivos preservados fora do recorte principal.
 - `data/staging/`: conversões exploratórias.
-- `data/profiles/`: perfis gerados para auditoria de colunas, cobertura e qualidade.
+- `data/profiles/`: perfis agregados versionados para auditoria de colunas, cobertura e qualidade. A pasta preserva evidências leves de acurácia, sem microdados individuais.
 
 Inventário consolidado da janela `2015-2024`:
 
 - `docs/inventario_bases.md`: cobertura principal, CNES selecionado e resumo de arquivos preservados/ignorados.
 - `data/profiles/datasus_file_inventory.csv`: inventário detalhado gerado localmente.
+- `data/profiles/README.md`: descrição dos perfis versionados e dos artefatos locais que permanecem ignorados.
 
 Para verificar arquivos ausentes no recorte atual:
 
