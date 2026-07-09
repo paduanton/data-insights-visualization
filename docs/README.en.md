@@ -173,6 +173,7 @@ For complementary sources validated through profiling, separate bronze loaders a
 ```bash
 python -m src.etl.load_cnes --years 2015:2024 --month 12
 python -m src.etl.load_sim --years 2015:2024
+python -m src.etl.load_basedosdados --years 2015:2024
 ```
 
 ## ETL Pipeline
@@ -234,6 +235,7 @@ Initial notebooks:
 - `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb`: maternal diagnosis and basis for treatment analysis.
 - `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventory and contextual use of CNES, IBGE, and SIM.
 - `notebooks/analytics/09_sintese_desigualdade_racial.ipynb`: final synthesis layer for racial inequality indicators.
+- `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb`: integrated context with Base dos Dados population, CNES, SIM, and incidence.
 
 ## Notebook Reference
 
@@ -252,6 +254,7 @@ Each notebook should be run from the repository root or through Google Colab. Wh
 | `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Does maternal diagnosis timing indicate differences in recorded care? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png` |
 | `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Which complementary sources can contextualize service supply, population, and outcomes? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
 | `notebooks/analytics/09_sintese_desigualdade_racial.ipynb` | Does the historical series confirm persistent incidence inequality between Black and non-Black mothers? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/09_sintese_desigualdade_racial.ipynb) | `docs/assets/results/sintese_desigualdade_racial.png` |
+| `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb` | How does congenital syphilis incidence sit alongside population, service-supply, and mortality context? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/10_contexto_integrado_basedosdados.ipynb) | `docs/assets/results/contexto_integrado_basedosdados.png` |
 
 When creating a new notebook, add a new row to this table and apply the same update to `docs/README.pt-BR.md`. The result image should be saved under `docs/assets/results/` when it is part of the project documentation, or under `outputs/images/` when it is an operational notebook output.
 
@@ -275,6 +278,7 @@ Historical consolidation validated in PostgreSQL for `2015-2024`:
 - SINASC: `1315073` live births in Rio Grande do Sul.
 - CNES/ST: `287630` facility records, using December as the annual snapshot.
 - SIM/DO: `943634` general death records in Rio Grande do Sul.
+- Base dos Dados/municipal population: `4970` aggregated records for Rio Grande do Sul municipalities, with `497` municipalities per year.
 - Porto Alegre has an annual incidence series calculated in `gold.indicadores_municipio_ano`.
 
 Validated series for Porto Alegre:
@@ -300,7 +304,7 @@ Decision profile for critical variables:
 - SINASC has stable fields for maternal race/color, prenatal consultations, maternal education, and municipality of residence across `2015-2024`.
 - CNES/ST has stable fields for facility, municipality, unit type, and activity in the December annual snapshot.
 - SIM/DO has stable fields for municipality of residence, municipality of occurrence, underlying cause, date of death, and race/color.
-- SINAN/SIFCBR education should be reviewed with the official data dictionary before refining final categories, because codes such as `00`, `01`, and `10` exist in the historical period and currently map to `Ignorada/sem informacao`.
+- SINAN/SIFCBR education preserves the detailed category in `escolaridade_mae_detalhada` and uses the analytical grouping `00-03` as up to 7 years of schooling, `04-08` as 8 or more years of schooling, and `09`, `10`, or empty values as ignored/missing information.
 - Ignored, empty, or missing categories remain preserved and measured in the queries.
 
 Generated images:
@@ -312,10 +316,8 @@ Generated images:
 - `docs/assets/results/contexto_cnes_ibge_sim.png`
 - `docs/assets/results/sintese_desigualdade_racial.png`
 - `docs/assets/results/perfil_colunas_qualidade.png`
-
-Images pending generation:
-
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
+- `docs/assets/results/contexto_integrado_basedosdados.png`
 
 Final-layer reading:
 
@@ -328,8 +330,9 @@ Base dos Dados audit:
 - The `basedosdados` package is installed locally and importable.
 - The `google-cloud-bigquery` client is also available.
 - Candidate BigQuery IDs are parameterized in `.env.example`.
-- The full audit still depends on configured `GOOGLE_CLOUD_PROJECT` and BigQuery credentials.
-- The preferred production strategy is direct BigQuery, with `dry_run`, byte limits, and municipality/UF/year filters before running larger queries.
+- The full audit was executed through BigQuery with `dry_run`, byte limits, and year/UF filters when available.
+- Audited periods: SINASC `1994-2024`, SIM `1996-2024`, CNES `2005-2025`, municipal population `2000-2025`, SIH `2008-2025`, and SINAN violence `2009-2019`.
+- Base dos Dados municipal population was incorporated as aggregated context in `gold.contexto_integrado_municipio_ano`; the main incidence denominator remains SINASC live births.
 
 ## Limitations
 
