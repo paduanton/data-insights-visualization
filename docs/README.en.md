@@ -226,12 +226,16 @@ Initial queries:
 - `database/queries/13_sintese_desigualdade_racial.sql`: annual synthesis of racial inequality in congenital syphilis incidence.
 - `database/queries/14_contexto_integrado_municipio.sql`: integrated incidence, population, CNES, and SIM context.
 - `database/queries/15_tratamento_materno_por_grupo_racial.sql`: adequate maternal treatment by racial group.
+- `database/queries/16_incidencia_raca_cor_detalhada.sql`: complementary incidence by detailed maternal race/color, with low-denominator warnings.
+- `database/queries/17_analise_interseccional_desigualdade.sql`: descriptive vulnerability marker combining education, prenatal care, diagnosis, and treatment.
+- `database/queries/18_perfil_maes_negras_escolaridade_idade.sql`: Black mothers' profile by education and maternal age group.
+- `database/queries/19_diagnostico_tardio_prenatal.sql`: diagnosis timing by racial group and prenatal care status.
 
 Each new query must answer an explicit analytical question and, when it produces a relevant result, it must be documented in this file and in `docs/README.pt-BR.md`.
 
 ## Notebooks
 
-Notebooks should live in `notebooks/analytics/` and answer specific analytical questions. The existing visualization notebook remains as an initial project reference.
+Analytical notebooks preferably live in `notebooks/analytics/` and answer specific questions. Final consolidation notebooks live in `notebooks/` because they organize existing results for the final report. The existing visualization notebook remains as an initial project reference.
 
 Analytical notebooks:
 
@@ -246,6 +250,8 @@ Analytical notebooks:
 - `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventory and contextual use of CNES, IBGE, and SIM.
 - `notebooks/analytics/09_sintese_desigualdade_racial.ipynb`: final synthesis layer for racial inequality indicators.
 - `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb`: integrated context with Base dos Dados population, CNES, SIM, and incidence.
+- `notebooks/11_analise_interseccional_desigualdade.ipynb`: detailed race/color incidence, Black mothers' profile, and descriptive intersectional analysis.
+- `notebooks/12_relatorio_final_consolidado.ipynb`: final synthesis of results, images, and limitations for the consolidated report.
 
 ## Notebook Reference
 
@@ -261,10 +267,12 @@ Each notebook should be run from the repository root or through Google Colab. Wh
 | `notebooks/analytics/04_perfil_colunas_qualidade.ipynb` | Which columns and critical variables support the final analytical schema? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/04_perfil_colunas_qualidade.ipynb) | `docs/assets/results/perfil_colunas_qualidade.png` |
 | `notebooks/analytics/05_serie_historica_incidencia.ipynb` | How does congenital syphilis incidence evolve across loaded years? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/05_serie_historica_incidencia.ipynb) | `docs/assets/results/serie_historica_incidencia.png` |
 | `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb` | Does estimated incidence differ between Black and non-Black mothers? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/06_desigualdade_racial_incidencia.ipynb) | `docs/assets/results/desigualdade_racial_incidencia.png` |
-| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Do maternal diagnosis and recorded adequate treatment indicate differences in care between racial groups? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/tratamento_materno_grupo_racial.png` |
+| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Do maternal diagnosis and recorded adequate treatment indicate differences in care between racial groups? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png`<br>`docs/assets/results/tratamento_materno_grupo_racial.png` |
 | `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Which complementary sources can contextualize service supply, population, and outcomes? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
 | `notebooks/analytics/09_sintese_desigualdade_racial.ipynb` | Does the historical series confirm persistent incidence inequality between Black and non-Black mothers? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/09_sintese_desigualdade_racial.ipynb) | `docs/assets/results/sintese_desigualdade_racial.png` |
 | `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb` | How does congenital syphilis incidence sit alongside population, service-supply, and mortality context? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/10_contexto_integrado_basedosdados.ipynb) | `docs/assets/results/contexto_integrado_basedosdados.png` |
+| `notebooks/11_analise_interseccional_desigualdade.ipynb` | How do detailed race/color, education, prenatal care, diagnosis, and treatment combine across reported cases? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/11_analise_interseccional_desigualdade.ipynb) | `outputs/images/final_report/incidencia_raca_cor_detalhada.png`<br>`outputs/images/final_report/analise_interseccional_desigualdade.png` |
+| `notebooks/12_relatorio_final_consolidado.ipynb` | Which results, images, and limitations support the final project reading? | [Open in Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/12_relatorio_final_consolidado.ipynb) | `outputs/images/final_report/qualidade_dados_ignorados.png` |
 
 When creating a new notebook, add a new row to this table and apply the same update to `docs/README.pt-BR.md`. The result image should be saved under `docs/assets/results/` when it is part of the project documentation, or under `outputs/images/` when it is an operational notebook output.
 
@@ -330,11 +338,25 @@ Generated images:
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
 - `docs/assets/results/contexto_integrado_basedosdados.png`
 
+Final report images:
+
+- `outputs/images/final_report/incidencia_grupo_racial_ano.png`
+- `outputs/images/final_report/razao_incidencia_racial.png`
+- `outputs/images/final_report/incidencia_raca_cor_detalhada.png`
+- `outputs/images/final_report/prenatal_grupo_racial.png`
+- `outputs/images/final_report/diagnostico_materno_grupo_racial.png`
+- `outputs/images/final_report/tratamento_materno_grupo_racial.png`
+- `outputs/images/final_report/perfil_maes_negras_escolaridade_idade.png`
+- `outputs/images/final_report/analise_interseccional_desigualdade.png`
+- `outputs/images/final_report/qualidade_dados_ignorados.png`
+
 Final-layer reading:
 
 - The incidence ratio between Black and non-Black mothers remains above `1` in every loaded year.
 - In `2024`, incidence among Black mothers was `1.54` times the incidence among non-Black mothers, with an absolute difference of `4.95` cases per 1,000 live births.
 - In `2024`, inadequate maternal treatment was recorded in `98.2%` of cases among Black mothers and `85.0%` among non-Black mothers in Porto Alegre.
+- The detailed race/color analysis confirms higher incidence among Black and Brown mothers than among White mothers in most of the series; Yellow, Indigenous, and ignored categories have low denominators and are treated as exploratory complements.
+- The intersectional analysis is descriptive: the higher-vulnerability marker combines low or ignored education with at least one absent, late, inadequate, or ignored care record.
 - The overall incidence drop after `2022` does not remove the relative inequality between groups.
 - Prenatal care, education, and maternal diagnosis analyses should be read as descriptive strata of reported cases, not as individual-level linkage or causal inference.
 

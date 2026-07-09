@@ -6,6 +6,9 @@ Full documentation:
 
 - [Português](docs/README.pt-BR.md)
 - [English](docs/README.en.md)
+- [Final results summary](docs/final_results_summary.md)
+- [Reproducibility report](docs/reproducibility_report.md)
+- [Proposal vs implementation](docs/anteprojeto_vs_implementacao.md)
 
 ## Project Diagrams
 

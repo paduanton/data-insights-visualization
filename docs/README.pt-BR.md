@@ -226,12 +226,16 @@ Consultas iniciais:
 - `database/queries/13_sintese_desigualdade_racial.sql`: síntese anual da desigualdade racial na incidência de sífilis congênita.
 - `database/queries/14_contexto_integrado_municipio.sql`: contexto integrado de incidência, população, CNES e SIM.
 - `database/queries/15_tratamento_materno_por_grupo_racial.sql`: tratamento materno adequado por grupo racial.
+- `database/queries/16_incidencia_raca_cor_detalhada.sql`: incidência complementar por raça/cor materna detalhada, com alerta para baixo denominador.
+- `database/queries/17_analise_interseccional_desigualdade.sql`: marcador descritivo de vulnerabilidade combinando escolaridade, pré-natal, diagnóstico e tratamento.
+- `database/queries/18_perfil_maes_negras_escolaridade_idade.sql`: perfil de mães negras por escolaridade e faixa etária materna.
+- `database/queries/19_diagnostico_tardio_prenatal.sql`: momento do diagnóstico por grupo racial e realização de pré-natal.
 
 Cada nova consulta deve responder uma pergunta analítica explícita e, quando gerar resultado relevante, deve ser documentada neste arquivo e em `docs/README.en.md`.
 
 ## Notebooks
 
-Os notebooks devem ficar em `notebooks/analytics/` e responder perguntas analíticas específicas. O notebook de visualização existente permanece como referência inicial do projeto.
+Os notebooks analíticos ficam preferencialmente em `notebooks/analytics/` e respondem perguntas específicas. Os notebooks finais de consolidação ficam em `notebooks/` porque organizam resultados já produzidos para o relatório final. O notebook de visualização existente permanece como referência inicial do projeto.
 
 Notebooks analíticos:
 
@@ -246,6 +250,8 @@ Notebooks analíticos:
 - `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb`: inventário e uso contextual de CNES, IBGE e SIM.
 - `notebooks/analytics/09_sintese_desigualdade_racial.ipynb`: camada final de síntese dos indicadores de desigualdade racial.
 - `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb`: contexto integrado com população da Base dos Dados, CNES, SIM e incidência.
+- `notebooks/11_analise_interseccional_desigualdade.ipynb`: incidência por raça/cor detalhada, perfil de mães negras e análise interseccional descritiva.
+- `notebooks/12_relatorio_final_consolidado.ipynb`: síntese final dos resultados, imagens e limitações para o relatório consolidado.
 
 ## Referência Dos Notebooks
 
@@ -261,10 +267,12 @@ Cada notebook deve ser executado a partir da raiz do repositório ou pelo Google
 | `notebooks/analytics/04_perfil_colunas_qualidade.ipynb` | Quais colunas e variáveis críticas sustentam o schema analítico final? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/04_perfil_colunas_qualidade.ipynb) | `docs/assets/results/perfil_colunas_qualidade.png` |
 | `notebooks/analytics/05_serie_historica_incidencia.ipynb` | Como a incidência de sífilis congênita evolui nos anos carregados? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/05_serie_historica_incidencia.ipynb) | `docs/assets/results/serie_historica_incidencia.png` |
 | `notebooks/analytics/06_desigualdade_racial_incidencia.ipynb` | A incidência estimada difere entre mães negras e mães não negras? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/06_desigualdade_racial_incidencia.ipynb) | `docs/assets/results/desigualdade_racial_incidencia.png` |
-| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Diagnóstico materno e tratamento adequado registrado indicam diferenças no cuidado entre grupos raciais? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/tratamento_materno_grupo_racial.png` |
+| `notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb` | Diagnóstico materno e tratamento adequado registrado indicam diferenças no cuidado entre grupos raciais? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/07_diagnostico_tratamento_cuidado.ipynb) | `docs/assets/results/diagnostico_materno_grupo_racial.png`<br>`docs/assets/results/tratamento_materno_grupo_racial.png` |
 | `notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb` | Quais fontes complementares podem contextualizar oferta assistencial, população e desfechos? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/08_contexto_cnes_ibge_sim.ipynb) | `docs/assets/results/contexto_cnes_ibge_sim.png` |
 | `notebooks/analytics/09_sintese_desigualdade_racial.ipynb` | A série histórica confirma desigualdade persistente na incidência entre mães negras e mães não negras? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/09_sintese_desigualdade_racial.ipynb) | `docs/assets/results/sintese_desigualdade_racial.png` |
 | `notebooks/analytics/10_contexto_integrado_basedosdados.ipynb` | Como a incidência de sífilis congênita se posiciona junto ao contexto populacional, assistencial e de mortalidade? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/analytics/10_contexto_integrado_basedosdados.ipynb) | `docs/assets/results/contexto_integrado_basedosdados.png` |
+| `notebooks/11_analise_interseccional_desigualdade.ipynb` | Como raça/cor detalhada, escolaridade, pré-natal, diagnóstico e tratamento se combinam nos casos notificados? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/11_analise_interseccional_desigualdade.ipynb) | `outputs/images/final_report/incidencia_raca_cor_detalhada.png`<br>`outputs/images/final_report/analise_interseccional_desigualdade.png` |
+| `notebooks/12_relatorio_final_consolidado.ipynb` | Quais resultados, imagens e limitações sustentam a leitura final do projeto? | [Abrir no Colab](https://colab.research.google.com/github/paduanton/data-insights-visualization/blob/main/notebooks/12_relatorio_final_consolidado.ipynb) | `outputs/images/final_report/qualidade_dados_ignorados.png` |
 
 Ao criar um novo notebook, adicione uma nova linha nesta tabela e mantenha a mesma atualização em `docs/README.en.md`. A imagem do resultado deve ser salva em `docs/assets/results/` quando fizer parte da documentação do projeto, ou em `outputs/images/` quando for uma saída operacional do notebook.
 
@@ -330,11 +338,25 @@ Imagens geradas:
 - `docs/assets/results/auditoria_basedosdados_periodos.png`
 - `docs/assets/results/contexto_integrado_basedosdados.png`
 
+Imagens finais para relatório:
+
+- `outputs/images/final_report/incidencia_grupo_racial_ano.png`
+- `outputs/images/final_report/razao_incidencia_racial.png`
+- `outputs/images/final_report/incidencia_raca_cor_detalhada.png`
+- `outputs/images/final_report/prenatal_grupo_racial.png`
+- `outputs/images/final_report/diagnostico_materno_grupo_racial.png`
+- `outputs/images/final_report/tratamento_materno_grupo_racial.png`
+- `outputs/images/final_report/perfil_maes_negras_escolaridade_idade.png`
+- `outputs/images/final_report/analise_interseccional_desigualdade.png`
+- `outputs/images/final_report/qualidade_dados_ignorados.png`
+
 Leitura da camada final:
 
 - A razão de incidência entre mães negras e mães não negras permanece acima de `1` em todos os anos carregados.
 - Em `2024`, a incidência entre mães negras foi `1,54` vez a incidência entre mães não negras, com diferença absoluta de `4,95` casos por 1.000 nascidos vivos.
 - Em `2024`, o tratamento materno inadequado foi registrado em `98,2%` dos casos de mães negras e em `85,0%` dos casos de mães não negras em Porto Alegre.
+- A análise por raça/cor detalhada confirma incidência maior em mães pretas e pardas do que em mães brancas na maior parte da série; categorias amarela, indígena e ignorada têm denominadores baixos e são tratadas como complemento exploratório.
+- A análise interseccional é descritiva: o marcador de maior vulnerabilidade combina baixa ou ignorada escolaridade com ao menos um registro de cuidado ausente, tardio, inadequado ou ignorado.
 - A queda geral da incidência após `2022` não elimina a desigualdade relativa entre os grupos.
 - As análises de pré-natal, escolaridade e diagnóstico materno devem ser lidas como estratos descritivos dos casos notificados, não como pareamento individual nem inferência causal.
 
