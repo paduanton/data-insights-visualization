@@ -227,7 +227,7 @@ def audit_tables(
             year_column=None,
             municipality_column=None,
             estimated_bytes="nao estimado",
-            status="pendente: configure GOOGLE_CLOUD_PROJECT e credenciais BigQuery",
+            status="nao executado: configure GOOGLE_CLOUD_PROJECT e credenciais BigQuery para consultar",
         )
 
         if client is not None:
@@ -276,7 +276,7 @@ def audit_year_series(
                     year_column=None,
                     year=None,
                     total_records=None,
-                    status="pendente: configure GOOGLE_CLOUD_PROJECT e credenciais BigQuery",
+                    status="nao executado: configure GOOGLE_CLOUD_PROJECT e credenciais BigQuery para consultar",
                 )
             )
             continue

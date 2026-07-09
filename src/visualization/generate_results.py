@@ -372,6 +372,69 @@ def save_integrated_context(database_url: str, output_dir: Path) -> Path:
     return output
 
 
+def save_maternal_treatment(database_url: str, output_dir: Path) -> Path:
+    query = """
+SELECT
+    ano,
+    grupo_racial_mae,
+    tratamento_materno_adequado,
+    SUM(casos_sc)::integer AS casos
+FROM gold.tratamento_materno_grupo_racial_municipio_ano
+WHERE cod_municipio_residencia = '431490'
+  AND grupo_racial_mae IN ('Maes negras', 'Maes nao negras')
+GROUP BY ano, grupo_racial_mae, tratamento_materno_adequado
+ORDER BY ano, grupo_racial_mae, tratamento_materno_adequado
+""".strip()
+    engine = create_engine(database_url)
+    data = pd.read_sql_query(text(query), engine)
+    totals = data.groupby(["ano", "grupo_racial_mae"])["casos"].transform("sum")
+    data["percentual"] = data["casos"] / totals * 100
+    inadequate = data[data["tratamento_materno_adequado"].eq("Inadequado")].copy()
+
+    fig, ax = plt.subplots(figsize=(10, 5.2))
+    labels = {
+        "Maes negras": "Mães negras",
+        "Maes nao negras": "Mães não negras",
+    }
+    colors = {
+        "Maes negras": "#7B3FC6",
+        "Maes nao negras": "#0072B2",
+    }
+    for group, subset in inadequate.groupby("grupo_racial_mae"):
+        subset = subset.sort_values("ano")
+        ax.plot(
+            subset["ano"],
+            subset["percentual"],
+            marker="o",
+            linewidth=2.4,
+            color=colors[group],
+            label=labels[group],
+        )
+        last = subset.iloc[-1]
+        ax.text(
+            last["ano"] + 0.08,
+            last["percentual"],
+            f"{last['percentual']:.1f}%",
+            va="center",
+            fontsize=9,
+            color=colors[group],
+        )
+
+    ax.set_title("Porto Alegre: tratamento materno inadequado por grupo racial", fontsize=14, weight="bold")
+    ax.set_xlabel("Ano")
+    ax.set_ylabel("Percentual dos casos notificados")
+    ax.set_xlim(data["ano"].min() - 0.2, data["ano"].max() + 0.8)
+    ax.set_ylim(0, max(100, inadequate["percentual"].max() + 5))
+    ax.grid(axis="y", color="#E6E6E6")
+    ax.legend(title="Grupo racial materno", loc="lower center", bbox_to_anchor=(0.5, -0.28), ncol=2, frameon=True)
+    fig.tight_layout()
+
+    output = output_dir / "tratamento_materno_grupo_racial.png"
+    fig.savefig(output, dpi=160, bbox_inches="tight")
+    plt.close(fig)
+    return output
+
+
 def main() -> None:
     args = parse_args()
     output_dir = resolve_project_path(args.output_dir)
@@ -384,6 +447,7 @@ def main() -> None:
         save_prenatal_race_schooling(args.database_url, output_dir),
         save_basedosdados_periods(resolve_project_path(args.audit_csv), output_dir),
         save_integrated_context(args.database_url, output_dir),
+        save_maternal_treatment(args.database_url, output_dir),
     ]
     for output in generated:
         print(output.relative_to(ROOT))
