@@ -1,0 +1,45 @@
+source,year,expected_kind,status,path
+SINAN/SIFCBR,2014,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR14.dbc ou data\raw\SIFCBR14.dbc
+SINASC,2014,nascidos_vivos,ausente,data\raw\sinasc\DNRS2014.dbc ou data\raw\sinasc\DNRS14.dbc
+CNES/ST,2014,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS1412.dbc ou data\raw\cnes\STRS1412.dbc
+SIM/DO,2014,obitos_gerais,ausente,data\raw\sim\do\DORS2014.dbc ou data\raw\sim\do\DORS14.dbc ou data\raw\sim\DORS2014.dbc ou data\raw\sim\DORS14.dbc
+SINAN/SIFCBR,2015,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR15.dbc ou data\raw\SIFCBR15.dbc
+SINASC,2015,nascidos_vivos,ausente,data\raw\sinasc\DNRS2015.dbc ou data\raw\sinasc\DNRS15.dbc
+CNES/ST,2015,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS1512.dbc ou data\raw\cnes\STRS1512.dbc
+SIM/DO,2015,obitos_gerais,ausente,data\raw\sim\do\DORS2015.dbc ou data\raw\sim\do\DORS15.dbc ou data\raw\sim\DORS2015.dbc ou data\raw\sim\DORS15.dbc
+SINAN/SIFCBR,2016,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR16.dbc ou data\raw\SIFCBR16.dbc
+SINASC,2016,nascidos_vivos,ausente,data\raw\sinasc\DNRS2016.dbc ou data\raw\sinasc\DNRS16.dbc
+CNES/ST,2016,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS1612.dbc ou data\raw\cnes\STRS1612.dbc
+SIM/DO,2016,obitos_gerais,ausente,data\raw\sim\do\DORS2016.dbc ou data\raw\sim\do\DORS16.dbc ou data\raw\sim\DORS2016.dbc ou data\raw\sim\DORS16.dbc
+SINAN/SIFCBR,2017,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR17.dbc ou data\raw\SIFCBR17.dbc
+SINASC,2017,nascidos_vivos,ausente,data\raw\sinasc\DNRS2017.dbc ou data\raw\sinasc\DNRS17.dbc
+CNES/ST,2017,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS1712.dbc ou data\raw\cnes\STRS1712.dbc
+SIM/DO,2017,obitos_gerais,ausente,data\raw\sim\do\DORS2017.dbc ou data\raw\sim\do\DORS17.dbc ou data\raw\sim\DORS2017.dbc ou data\raw\sim\DORS17.dbc
+SINAN/SIFCBR,2018,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR18.dbc ou data\raw\SIFCBR18.dbc
+SINASC,2018,nascidos_vivos,ausente,data\raw\sinasc\DNRS2018.dbc ou data\raw\sinasc\DNRS18.dbc
+CNES/ST,2018,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS1812.dbc ou data\raw\cnes\STRS1812.dbc
+SIM/DO,2018,obitos_gerais,ausente,data\raw\sim\do\DORS2018.dbc ou data\raw\sim\do\DORS18.dbc ou data\raw\sim\DORS2018.dbc ou data\raw\sim\DORS18.dbc
+SINAN/SIFCBR,2019,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR19.dbc ou data\raw\SIFCBR19.dbc
+SINASC,2019,nascidos_vivos,ausente,data\raw\sinasc\DNRS2019.dbc ou data\raw\sinasc\DNRS19.dbc
+CNES/ST,2019,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS1912.dbc ou data\raw\cnes\STRS1912.dbc
+SIM/DO,2019,obitos_gerais,ausente,data\raw\sim\do\DORS2019.dbc ou data\raw\sim\do\DORS19.dbc ou data\raw\sim\DORS2019.dbc ou data\raw\sim\DORS19.dbc
+SINAN/SIFCBR,2020,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR20.dbc ou data\raw\SIFCBR20.dbc
+SINASC,2020,nascidos_vivos,ausente,data\raw\sinasc\DNRS2020.dbc ou data\raw\sinasc\DNRS20.dbc
+CNES/ST,2020,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS2012.dbc ou data\raw\cnes\STRS2012.dbc
+SIM/DO,2020,obitos_gerais,ausente,data\raw\sim\do\DORS2020.dbc ou data\raw\sim\do\DORS20.dbc ou data\raw\sim\DORS2020.dbc ou data\raw\sim\DORS20.dbc
+SINAN/SIFCBR,2021,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR21.dbc ou data\raw\SIFCBR21.dbc
+SINASC,2021,nascidos_vivos,ausente,data\raw\sinasc\DNRS2021.dbc ou data\raw\sinasc\DNRS21.dbc
+CNES/ST,2021,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS2112.dbc ou data\raw\cnes\STRS2112.dbc
+SIM/DO,2021,obitos_gerais,ausente,data\raw\sim\do\DORS2021.dbc ou data\raw\sim\do\DORS21.dbc ou data\raw\sim\DORS2021.dbc ou data\raw\sim\DORS21.dbc
+SINAN/SIFCBR,2022,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR22.dbc ou data\raw\SIFCBR22.dbc
+SINASC,2022,nascidos_vivos,ausente,data\raw\sinasc\DNRS2022.dbc ou data\raw\sinasc\DNRS22.dbc
+CNES/ST,2022,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS2212.dbc ou data\raw\cnes\STRS2212.dbc
+SIM/DO,2022,obitos_gerais,ausente,data\raw\sim\do\DORS2022.dbc ou data\raw\sim\do\DORS22.dbc ou data\raw\sim\DORS2022.dbc ou data\raw\sim\DORS22.dbc
+SINAN/SIFCBR,2023,sifilis_congenita,ausente,data\raw\sinan\sifilis_congenita\SIFCBR23.dbc ou data\raw\SIFCBR23.dbc
+SINASC,2023,nascidos_vivos,ausente,data\raw\sinasc\DNRS2023.dbc ou data\raw\sinasc\DNRS23.dbc
+CNES/ST,2023,estabelecimentos_dezembro,ausente,data\raw\cnes\st\STRS2312.dbc ou data\raw\cnes\STRS2312.dbc
+SIM/DO,2023,obitos_gerais,ausente,data\raw\sim\do\DORS2023.dbc ou data\raw\sim\do\DORS23.dbc ou data\raw\sim\DORS2023.dbc ou data\raw\sim\DORS23.dbc
+SINAN/SIFCBR,2024,sifilis_congenita,presente,data\raw\SIFCBR24.dbc
+SINASC,2024,nascidos_vivos,presente,data\raw\sinasc\DNRS2024.dbc
+CNES/ST,2024,estabelecimentos_dezembro,presente,data\raw\cnes\STRS2412.dbc
+SIM/DO,2024,obitos_gerais,presente,data\raw\sim\DORS2024.dbc

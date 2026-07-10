@@ -32,27 +32,6 @@ build/
 postgres_data/
 *.log
 
-# Generated data products
-data/profiles/*
-!data/profiles/.gitkeep
-!data/profiles/README.md
-!data/profiles/basedosdados_audit.csv
-!data/profiles/basedosdados_year_series.csv
-!data/profiles/cnes_st_column_profile_2015_2024.csv
-!data/profiles/datasus_column_profile_2015_2024.csv
-!data/profiles/datasus_file_inventory.csv
-!data/profiles/datasus_missing_files_2015_2024.csv
-!data/profiles/datasus_missing_files_2015_2024.md
-!data/profiles/sim_do_column_profile_2015_2024.csv
-data/staging/*
-!data/staging/.gitkeep
-data/raw/**
-!data/raw/**/
-!data/raw/**/.gitkeep
-data/ignored/**
-!data/ignored/**/
-!data/ignored/**/.gitkeep
-
 # Temporary files
 tmp/
 temp/

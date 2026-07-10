@@ -1,0 +1,7 @@
+data/raw/**/*.dbc filter=lfs diff=lfs merge=lfs -text
+data/raw/**/*.dbf filter=lfs diff=lfs merge=lfs -text
+data/raw/**/*.DBF filter=lfs diff=lfs merge=lfs -text
+data/raw/**/*.zip filter=lfs diff=lfs merge=lfs -text
+data/ignored/**/*.dbc filter=lfs diff=lfs merge=lfs -text
+data/ignored/**/*.dbf filter=lfs diff=lfs merge=lfs -text
+data/ignored/**/*.DBF filter=lfs diff=lfs merge=lfs -text
